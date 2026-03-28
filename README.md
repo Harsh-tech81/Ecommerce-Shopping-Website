@@ -16,6 +16,11 @@ MERN Full Stack Project/
   Server/  -> Express + MongoDB API
 ```
 
+## 🌐 Live Links
+
+- 🛍️ Client: https://splendorous-marzipan-2ace59.netlify.app
+- 🛠️ Admin: https://bejewelled-sunshine-44d5ba.netlify.app
+
 ## Tech Stack
 
 ### Frontend (Client + Admin)
