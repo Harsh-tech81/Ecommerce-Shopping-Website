@@ -1,0 +1,165 @@
+.MuiBadge-badge {
+  background: #ff5252 !important;
+}
+.ReactCollapse--collapse {
+  transition: height 300ms ease;
+}
+body {
+  font-family: "Roboto", sans-serif;
+  background: #f1f1f1;
+}
+.btn {
+  padding: 8px 20px !important;
+}
+
+.btn-blue {
+  background-color: #3872fa !important;
+  color: #fff !important;
+  padding: 8px 20px !important;
+}
+.btn-sm {
+  padding: 6px 20px !important;
+  font-size: 13px !important;
+}
+.btn-lg {
+  padding: 8px 20px !important;
+  font-size: 16px !important;
+}
+.btn-blue:hover {
+  background-color: #3067e5 !important;
+}
+::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc !important;
+}
+
+th.MuiTableCell-root {
+  @apply bg-[#f1f1f1];
+  padding: 4px !important;
+}
+
+a.active button {
+  background: #e8e8e8 !important;
+}
+
+.MuiButton-icon svg {
+  font-size: 27px !important;
+}
+.css-rizt0-MuiTypography-root {
+  font-size: 14px !important;
+}
+
+.MuiAppBar-colorPrimary {
+  background: #e6e6e6 !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+.MuiSelect-select {
+  background: #fff !important;
+}
+
+.MuiDialog-paper {
+  background-color: #f9fafb !important;
+}
+
+.optBox input {
+  border: 1px solid rgba(0, 0, 0, 0.3) !important;
+  outline: none !important;
+  border-radius: 4px !important;
+}
+.optBox input:focus {
+  border: 1px solid rgba(0, 0, 0, 0.7) !important;
+}
+.otpPage .container {
+  height: 90vh;
+  display: flex;
+}
+
+.MuiTableBody-root tr:nth-child(even) {
+  background-color: hsl(0, 0%, 96%) !important;
+}
+
+button .MuiCircularProgress-root {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+input[type="text"]:disabled,
+input[type="email"]:disabled {
+  background-color: #f1f1f1 !important;
+  pointer-events: none;
+}
+
+.react-international-phone-country-selector-button {
+  width: 55px !important;
+}
+.react-international-phone-input {
+  width: 100% !important;
+}
+.react-international-phone-input-container {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.Mui-focused fieldset legend {
+  display: none !important;
+}
+
+.zoomProductSliderThumbs .swiper-wrapper {
+  padding-top: 38px !important;
+}
+
+.zoomProductSliderThumbs .swiper-button-next {
+  bottom: 0px !important;
+  left: 22px !important;
+  top: inherit !important;
+  width: 100% !important;
+  height: 30px !important;
+  border-radius: 0px !important;
+}
+.zoomProductSliderThumbs .swiper-button-prev {
+  top: 0px !important;
+  left: 22px !important;
+  width: 100% !important;
+  height: 30px !important;
+  border-radius: 0px !important;
+}
+.zoomProductSliderThumbs .swiper-button-prev:hover,
+.zoomProductSliderThumbs .swiper-button-next:hover {
+  background: #ff5252 !important;
+}
+.zoomProductSliderThumbs .swiper-button-prev:hover svg,
+.zoomProductSliderThumbs .swiper-button-next:hover svg {
+  color: #fff !important;
+}
+.zoomProductSliderThumbs .swiper-slide {
+  overflow: hidden !important;
+  height: 80px !important;
+  /* object-fit: cover !important; */
+  border-radius: 3px;
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+}
+
+.swiper-slide .iiz {
+  height: 400px !important;
+  overflow: hidden !important;
+}
+.rsw-editor{
+  min-height:200px !important; 
+  background-color: #fff !important;
+}
+

@@ -1,0 +1,11 @@
+.productItem .title {
+line-height: 18px;
+
+}
+.productItem .actions {
+    transition: all 0.3s ease;
+}
+
+.productItem .actions button svg{
+    pointer-events: none !important;
+}

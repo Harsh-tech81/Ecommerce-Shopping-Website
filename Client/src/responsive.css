@@ -1,0 +1,128 @@
+@media only screen and (min-width: 320px) and (max-width: 992px) {
+  html,body {
+    overflow-x: hidden;
+  }
+
+.mobileNav a,
+.mobileNav a:visited,
+.mobileNav .mobile-nav-btn,
+.mobileNav .mobile-nav-btn svg,
+.mobileNav .mobile-nav-btn span {
+  color: #000 !important;
+}
+
+.mobileNav a.active .mobile-nav-btn,
+.mobileNav a.active .mobile-nav-btn svg,
+.mobileNav a.active .mobile-nav-btn span {
+  color: #ff3212 !important;
+}
+
+.navigation ul{
+white-space: nowrap; overflow-x: scroll;overflow-y: hidden; display: block !important; text-align: center !important;
+}
+.navigation ul::-webkit-scrollbar {
+  display: none !important;
+}
+.navigation ul li {
+  display: inline-block !important;
+  vertical-align: top !important;
+}
+.container {
+  width: 95% !important;
+  max-width: 95% !important;
+}
+.btn-sm{
+    padding: 3px 10px !important;
+    font-size: 11px !important;
+}
+.btn-lg{
+    padding: 5px 10px !important;
+    font-size: 14px !important;
+}
+.btn{
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+}
+.btn-svg{
+    font-size: 15px !important;
+}
+
+.scrollable{
+    white-space: nowrap; overflow-x: scroll;overflow-y: hidden; display: block !important; 
+}
+.scrollable::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollable .box{
+display: inline-block !important;
+vertical-align: top !important;
+margin-right: 12px !important;
+width: 300px !important;
+}
+.scrollable .box .info *{
+white-space: break-spaces !important;
+}
+.scrollable .col{
+display: inline-block !important;
+vertical-align: top !important;
+margin-right: 12px !important;
+width: 200px !important;
+}
+.footerBoxWrap{
+  padding-left: 20px !important;
+}
+.footerBoxWrap .col{
+  width: 200px !important;
+}
+
+/* CartPanel and AddressPanel responsive */
+.cartPanel .MuiPaper-root {
+  width: 80% !important;
+}
+.addressPanel .MuiPaper-root {
+  width: 80% !important;
+}
+
+/* Dialog responsive */
+/* .MuiDialog-paper {
+  width: 95% !important;
+  max-width: 95% !important;
+  margin: 10px !important;
+}
+.productDetailsModal .MuiDialog-paper {
+  width: 95% !important;
+  max-width: 95% !important;
+} */
+
+/* ProductItem responsive height */
+/* .productItem {
+  height: auto !important;
+}
+.productItem .imgWrapper {
+  height: 180px !important;
+}
+.productItem .info {
+  height: auto !important;
+}
+.productItem .img {
+  height: 250px !important;
+}
+.productItem .info {
+  padding-bottom: 12px !important;
+}
+.productItem .info .btn-org {
+  margin-top: 10px !important;
+} */
+
+/* Review section responsive */
+.review {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+}
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .MuiTabs-flexContainer button{
+        font-size: 13px !important;
+    }
+}

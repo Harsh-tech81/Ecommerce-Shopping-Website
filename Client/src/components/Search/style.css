@@ -1,0 +1,7 @@
+.searchBox input::placeholder{
+    color : #1f1f1f !important;
+}
+.searchBox input{
+    margin-left: 23px;
+margin-top: 8px;
+}
