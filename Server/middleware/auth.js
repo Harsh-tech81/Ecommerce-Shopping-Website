@@ -1,0 +1,37 @@
+import jwt from "jsonwebtoken";
+import UserModel from "../models/user.model.js";
+
+export const auth = async (req, res, next) => {
+  try {
+    const token =
+      req?.cookies?.accessToken ||
+      req?.headers?.authorization?.split(" ")[1];
+    // if (!token) {
+    //   token = req.query.token;
+    // }
+    if (!token) {
+      return res.status(401).json({
+        message: "Provide token",
+      });
+    }
+    const decodedToken = await jwt.verify(
+      token,
+      process.env.SECRET_KEY_ACCESS_TOKEN,
+    );
+    if (!decodedToken) {
+      return res.status(401).json({
+        message: "Unauthorized access",
+        error: true,
+        success: false,
+      });
+    }
+    req.userId = decodedToken.id;
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      message: error?.name === "TokenExpiredError" ? "Token expired" : "Invalid token",
+      error: true,
+      success: false,
+    });
+  }
+};
