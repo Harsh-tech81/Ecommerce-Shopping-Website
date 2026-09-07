@@ -18,8 +18,8 @@ MERN Full Stack Project/
 
 ## 🌐 Live Links
 
-- 🛍️ Client: https://splendorous-marzipan-2ace59.netlify.app
-- 🛠️ Admin: https://bejewelled-sunshine-44d5ba.netlify.app
+- 🛍️ Client: https://ecommerce-shopping-website-six.vercel.app
+- 🛠️ Admin: https://ecommerce-shopping-website-3zxy.vercel.app
 
 ## Tech Stack
 
