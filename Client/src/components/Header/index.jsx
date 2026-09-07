@@ -68,7 +68,7 @@ function Header() {
           <div className="flex items-center justify-between">
             <div className="col1 w-1/2 hidden lg:block">
               <p className="text-xs font-medium">
-                Get up to 30% off new season styles,limited time only!
+                Get up to 50% off new season styles,limited time only!
               </p>
             </div>
             <div className="col2 flex items-center justify-between w-full lg:w-1/2 lg:justify-end">
