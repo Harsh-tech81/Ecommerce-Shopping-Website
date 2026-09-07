@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import { Navigation,Autoplay,FreeMode } from "swiper/modules";
-import BannerBox from "../bannerBox";
+import BannerBox from "../BannerBox";
 
 function AdsBannerSlider(props) {
   const context = useContext(MyContext);

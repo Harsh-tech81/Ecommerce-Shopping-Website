@@ -4,7 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import { Navigation, Autoplay } from "swiper/modules";
-import BannerBox from "../bannerBox";
+import BannerBox from "../BannerBox";
 
 function AdsBannerSliderV2(props) {
   return (

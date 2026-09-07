@@ -10,7 +10,7 @@ import { MyContext } from "../../App";
 import { postData } from "../../utils/api.js";
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { firebaseApp } from "../../../src/firebase.jsx";
+import { firebaseApp } from "../../firebase.jsx";
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 

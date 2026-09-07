@@ -11,7 +11,7 @@ import { useContext } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { firebaseApp } from "../../../src/firebase.jsx";
+import { firebaseApp } from "../../firebase.jsx";
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
