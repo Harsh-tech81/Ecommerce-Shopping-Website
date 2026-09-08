@@ -11,6 +11,9 @@ import Pagination from "@mui/material/Pagination";
 import ProductLoading from "../../components/ProductLoading";
 import { postData } from "../../utils/api";
 import { MyContext } from "../../App";
+import Drawer from "@mui/material/Drawer";
+import { IoCloseSharp } from "react-icons/io5";
+import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 
 function ProductListing() {
   const [itemView, setItemView] = useState("grid");
@@ -20,7 +23,9 @@ function ProductListing() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedSortVal, setSelectedSortVal] = useState("Name, A to Z");
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const context = useContext(MyContext);
+  const isMobile = context?.windowWidth <= 992;
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -41,24 +46,27 @@ function ProductListing() {
     });
   };
 
+  const sidebarProps = {
+    productData,
+    setProductData,
+    isLoading,
+    setIsLoading,
+    page,
+    setPage,
+    totalPages,
+    setTotalPages,
+  };
+
   return (
     <section style={{ paddingTop: "0px", paddingBottom: "0px" }}>
       
 
       <div className="bg-white " style={{ padding: "15px", marginTop: "16px" }}>
         <div className="container flex gap-3" style={{ flexDirection: context?.isLarge ? "row" : "column" }}>
-          {context?.windowWidth > 992 && (
-            <div className="sidebarWrapper bg-white" style={{ width: context?.isLarge ? "20%" : "100%" }}>
-              <Sidebar
-                productData={productData}
-                setProductData={setProductData}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                page={page}
-                setPage={setPage}
-                totalPages={totalPages}
-                setTotalPages={setTotalPages}
-              />
+          {/* Desktop sidebar */}
+          {!isMobile && (
+            <div className="sidebarWrapper bg-white" style={{ width: "20%" }}>
+              <Sidebar {...sidebarProps} />
             </div>
           )}
 
@@ -68,10 +76,21 @@ function ProductListing() {
           >
             <div
               className="flex items-center justify-between rounded-md bg-[#f1f1f1] w-full sticky top-[130px] z-[99]"
-              style={{ padding: "10px 15px", marginBottom: "16px", flexDirection: context?.isLarge ? "row" : "column", gap: context?.isLarge ? "0px" : "10px" }}
+              style={{ padding: "10px 15px", marginBottom: "16px", flexDirection: context?.isLarge ? "row" : "row", gap: "10px", flexWrap: "wrap" }}
             >
               <div className="col1 flex items-center itemViewActions">
-            
+                {/* Mobile filter button */}
+                {isMobile && (
+                  <Button
+                    className="!min-w-0 !text-[#000] !font-[500] !text-[13px] !capitalize !bg-white !rounded-md"
+                    style={{ padding: "6px 14px", marginRight: "8px" }}
+                    onClick={() => setMobileFilterOpen(true)}
+                  >
+                    <HiOutlineAdjustmentsHorizontal className="text-[16px]" style={{ marginRight: "6px" }} />
+                    Filters
+                  </Button>
+                )}
+
                 <Button
                   className={`!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !text-[#000] ${
                     itemView === "grid" && "active"
@@ -81,12 +100,14 @@ function ProductListing() {
                   <IoGridSharp className="text-[rgba(0,0,0,0.8)]" />
                 </Button>
 
-                <span
-                  className="text-[14px] font-[500] text-[rgba(0,0,0,0.7)]"
-                  style={{ paddingLeft: "20px" }}
-                >
-                  There are {productData?.length || 0} products.
-                </span> 
+                {!isMobile && (
+                  <span
+                    className="text-[14px] font-[500] text-[rgba(0,0,0,0.7)]"
+                    style={{ paddingLeft: "20px" }}
+                  >
+                    There are {productData?.length || 0} products.
+                  </span>
+                )}
               </div>
 
               <div
@@ -95,7 +116,6 @@ function ProductListing() {
               >
                 <span
                   className="text-[14px] font-[500] text-[rgba(0,0,0,0.7)]"
-                  style={{ paddingLeft: "20px" }}
                 >
                   Sort By
                 </span>
@@ -107,7 +127,7 @@ function ProductListing() {
                   aria-expanded={open ? "true" : undefined}
                   onClick={handleClick}
                   className="!text-[12px]  !bg-white !text-[#000] !capitalize !font-[600]"
-                  style={{ padding: "6px 29px" }}
+                  style={{ padding: "6px 16px" }}
                 >
                   {selectedSortVal}
                 </Button>
@@ -203,6 +223,29 @@ function ProductListing() {
           </div>
         </div>
       </div>
+
+      {/* Mobile filter drawer */}
+      <Drawer
+        open={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        anchor="left"
+      >
+        <div style={{ width: "85vw", maxWidth: "350px" }}>
+          <div
+            className="flex justify-between items-center border-b border-[rgba(0,0,0,0.2)]"
+            style={{ padding: "16px 20px" }}
+          >
+            <h4 className="text-[16px] font-[600]">Filters</h4>
+            <IoCloseSharp
+              className="text-[22px] cursor-pointer"
+              onClick={() => setMobileFilterOpen(false)}
+            />
+          </div>
+          <div style={{ padding: "16px", overflowY: "auto", maxHeight: "calc(100vh - 60px)" }}>
+            <Sidebar {...sidebarProps} />
+          </div>
+        </div>
+      </Drawer>
     </section>
   );
 }

@@ -406,13 +406,40 @@ button .MuiCircularProgress-root {
 }
 
 .MuiDialog-paper {
-  width: 700px !important;
+  width: 95% !important;
   max-width: 700px !important;
 }
 
 .productDetailsModal .MuiDialog-paper {
-  width: 1200px !important;
+  width: 95% !important;
   max-width: 1200px !important;
+}
+
+/* Mobile bottom nav spacing */
+@media only screen and (max-width: 992px) {
+  body {
+    padding-bottom: 70px;
+  }
+  .productDetailsModal .productDetailsModalContainer {
+    flex-direction: column !important;
+  }
+  .productDetailsModal .productDetailsModalContainer .col1,
+  .productDetailsModal .productDetailsModalContainer .col2 {
+    width: 100% !important;
+  }
+  .productDetailsModal .productDetailsModalContainer .col2 {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 header {
   box-shadow: 0px 1px 5px #0000001a;

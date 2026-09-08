@@ -17,6 +17,8 @@ function Navigation(props) {
     setIsOpenCatPanel(true);
   };
   const context = useContext(MyContext);
+  const isMobile = context?.windowWidth <= 992;
+
   useEffect(() => {
     setCatData(context?.catData);
   }, [context?.catData]);
@@ -29,7 +31,7 @@ function Navigation(props) {
     <>
       <nav className="navigation">
         <div className="container flex items-center justify-start lg:justify-end gap-8">
-          {context?.windowWidth > 992 && (
+          {!isMobile && (
             <div className="col1 w-[20%]">
               <Button
                 className="text-black! gap-2 w-full"
@@ -45,97 +47,131 @@ function Navigation(props) {
             </div>
           )}
 
-          <div className="col2  w-full lg:w-[60%] hidden lg:block">
-            <ul className="flex items-center gap-3 nav">
-              <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]">
-                  <Button
-                    className="link transition !font-[500] !text-[rgba(0,0,0,0.8)] hover:!text-[#ff5252]"
-                    style={{ paddingTop: "16px", paddingBottom: "16px" }}
-                  >
-                    Home
-                  </Button>
-                </Link>
-              </li>
+          {/* Desktop: full nav with submenus */}
+          {!isMobile && (
+            <div className="col2 w-[60%]">
+              <ul className="flex items-center gap-3 nav">
+                <li className="list-none">
+                  <Link to="/" className="link transition text-[14px] font-[500]">
+                    <Button
+                      className="link transition !font-[500] !text-[rgba(0,0,0,0.8)] hover:!text-[#ff5252]"
+                      style={{ paddingTop: "16px", paddingBottom: "16px" }}
+                    >
+                      Home
+                    </Button>
+                  </Link>
+                </li>
 
-
-              {context?.windowWidth > 992 && catData?.length !== 0 &&
-                catData?.map((cat, index) => {
-                  return (
-                    <li className="list-none relative" key={index}>
-                      <Link
-                        to={`/products?catId=${cat._id}`}
-                        className="link transition text-[14px] font-[500]"
-                      >
-                        <Button
-                          className="link transition !font-[500] !text-[rgba(0,0,0,0.8)] hover:!text-[#ff5252] "
-                          style={{ paddingTop: "16px", paddingBottom: "16px" }}
+                {catData?.length !== 0 &&
+                  catData?.map((cat, index) => {
+                    return (
+                      <li className="list-none relative" key={index}>
+                        <Link
+                          to={`/products?catId=${cat._id}`}
+                          className="link transition text-[14px] font-[500]"
                         >
-                          {cat?.name}
-                        </Button>
-                      </Link>
+                          <Button
+                            className="link transition !font-[500] !text-[rgba(0,0,0,0.8)] hover:!text-[#ff5252] "
+                            style={{ paddingTop: "16px", paddingBottom: "16px" }}
+                          >
+                            {cat?.name}
+                          </Button>
+                        </Link>
 
-                      {cat?.children?.length !== 0 && (
-                        <div className="submenu absolute top-[120%] left-[0%] min-w-[150px] bg-white shadow-md opacity-0 transition-all">
-                          <ul>
-                            {cat?.children?.map((subCat, index_) => {
-                              return (
-                                <li
-                                  className="list-none w-full relative"
-                                  key={index_}
-                                >
-                                  <Link
-                                    to={`/products?subCatId=${subCat._id}`}
-                                    className="w-full"
+                        {cat?.children?.length !== 0 && (
+                          <div className="submenu absolute top-[120%] left-[0%] min-w-[150px] bg-white shadow-md opacity-0 transition-all">
+                            <ul>
+                              {cat?.children?.map((subCat, index_) => {
+                                return (
+                                  <li
+                                    className="list-none w-full relative"
+                                    key={index_}
                                   >
-                                    <Button className="text-[rgba(0,0,0,0.9)]! w-full text-left! justify-start! rounded-none!  hover:!text-[#ff5252] ">
-                                      {subCat?.name}
-                                    </Button>
-                                  </Link>
+                                    <Link
+                                      to={`/products?subCatId=${subCat._id}`}
+                                      className="w-full"
+                                    >
+                                      <Button className="text-[rgba(0,0,0,0.9)]! w-full text-left! justify-start! rounded-none!  hover:!text-[#ff5252] ">
+                                        {subCat?.name}
+                                      </Button>
+                                    </Link>
 
-                                  {subCat?.children?.length !== 0 && (
-                                    <div className="submenu absolute top-[0%] left-[100%] min-w-[150px] bg-white shadow-md opacity-0 transition-all ">
-                                      <ul>
-                                        {subCat?.children?.map(
-                                          (subSubCat, index__) => {
-                                            return (
-                                              <li
-                                                className="list-none w-full"
-                                                key={index__}
-                                              >
-                                                <Link
-                                                  to={`/products?thirdLevelCatId=${subSubCat._id}`}
-                                                  className="w-full"
+                                    {subCat?.children?.length !== 0 && (
+                                      <div className="submenu absolute top-[0%] left-[100%] min-w-[150px] bg-white shadow-md opacity-0 transition-all ">
+                                        <ul>
+                                          {subCat?.children?.map(
+                                            (subSubCat, index__) => {
+                                              return (
+                                                <li
+                                                  className="list-none w-full"
+                                                  key={index__}
                                                 >
-                                                  <Button className="text-[rgba(0,0,0,0.9)]! w-full text-left! justify-start! rounded-none! hover:!text-[#ff5252]">
-                                                    {subSubCat?.name}
-                                                  </Button>
-                                                </Link>
-                                              </li>
-                                            );
-                                          },
-                                        )}
-                                      </ul>
-                                    </div>
-                                  )}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                      )}
-                    </li>
-                  );
-                })}
+                                                  <Link
+                                                    to={`/products?thirdLevelCatId=${subSubCat._id}`}
+                                                    className="w-full"
+                                                  >
+                                                    <Button className="text-[rgba(0,0,0,0.9)]! w-full text-left! justify-start! rounded-none! hover:!text-[#ff5252]">
+                                                      {subSubCat?.name}
+                                                    </Button>
+                                                  </Link>
+                                                </li>
+                                              );
+                                            },
+                                          )}
+                                        </ul>
+                                      </div>
+                                    )}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          )}
 
-            </ul>
-          </div>
-          <div className="col3 w-[21%] hidden lg:block">
-            <p className="text-[14px] font-[500] flex items-center gap-3 mb-0 mt-0">
-              <GoRocket className=" text-[18px]" />
-              Free International Delivery
-            </p>
-          </div>
+          {/* Mobile: horizontal scrollable categories */}
+          {isMobile && catData?.length !== 0 && (
+            <div className="col2 w-full overflow-x-auto scrollbar-hide">
+              <ul className="flex items-center gap-1 nav whitespace-nowrap" style={{ paddingBottom: "2px" }}>
+                <li className="list-none flex-shrink-0">
+                  <Link to="/">
+                    <Button
+                      className="!font-[500] !text-[rgba(0,0,0,0.8)] hover:!text-[#ff5252] !text-[12px] !min-w-0 !px-3"
+                      style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                    >
+                      Home
+                    </Button>
+                  </Link>
+                </li>
+                {catData?.map((cat, index) => (
+                  <li className="list-none flex-shrink-0" key={index}>
+                    <Link to={`/products?catId=${cat._id}`}>
+                      <Button
+                        className="!font-[500] !text-[rgba(0,0,0,0.8)] hover:!text-[#ff5252] !text-[12px] !min-w-0 !px-3"
+                        style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                      >
+                        {cat?.name}
+                      </Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {!isMobile && (
+            <div className="col3 w-[21%]">
+              <p className="text-[14px] font-[500] flex items-center gap-3 mb-0 mt-0">
+                <GoRocket className=" text-[18px]" />
+                Free International Delivery
+              </p>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -148,7 +184,7 @@ function Navigation(props) {
           data={catData}
         />
       )}
-      {context?.windowWidth <= 992 && <MobileNav />}
+      {isMobile && <MobileNav />}
     </>
   );
 }

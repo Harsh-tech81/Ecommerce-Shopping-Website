@@ -77,42 +77,22 @@ width: 200px !important;
 
 /* CartPanel and AddressPanel responsive */
 .cartPanel .MuiPaper-root {
-  width: 80% !important;
+  width: 85% !important;
+  max-width: 400px !important;
 }
 .addressPanel .MuiPaper-root {
-  width: 80% !important;
+  width: 90% !important;
+  max-width: 450px !important;
 }
-
-/* Dialog responsive */
-/* .MuiDialog-paper {
-  width: 95% !important;
-  max-width: 95% !important;
-  margin: 10px !important;
-}
-.productDetailsModal .MuiDialog-paper {
-  width: 95% !important;
-  max-width: 95% !important;
-} */
 
 /* ProductItem responsive height */
-/* .productItem {
-  height: auto !important;
-}
 .productItem .imgWrapper {
-  height: 180px !important;
+  height: auto !important;
 }
 .productItem .info {
   height: auto !important;
+  padding-bottom: 10px !important;
 }
-.productItem .img {
-  height: 250px !important;
-}
-.productItem .info {
-  padding-bottom: 12px !important;
-}
-.productItem .info .btn-org {
-  margin-top: 10px !important;
-} */
 
 /* Review section responsive */
 .review {
@@ -120,9 +100,52 @@ width: 200px !important;
   align-items: flex-start !important;
   gap: 10px !important;
 }
+
+/* Account menu responsive */
+#account-menu .MuiPaper-root {
+  width: 180px !important;
 }
+
+/* Product zoom responsive */
+.zoomProductSliderThumbs {
+  display: none !important;
+}
+.zoomContainerSwiper {
+  width: 100% !important;
+}
+
+/* OTP box responsive */
+.optBox {
+  justify-content: center !important;
+}
+.optBox input {
+  width: 38px !important;
+  height: 38px !important;
+  font-size: 16px !important;
+}
+
+}
+
 @media only screen and (min-width: 320px) and (max-width: 767px) {
     .MuiTabs-flexContainer button{
         font-size: 13px !important;
     }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  /* Extra small screens */
+  .optBox input {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 14px !important;
+  }
+  
+  .MuiPagination-ul {
+    flex-wrap: nowrap !important;
+  }
+  .MuiPagination-ul .MuiPaginationItem-root {
+    min-width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+  }
 }

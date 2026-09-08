@@ -65,6 +65,11 @@ export const postData = async (url, formData, options = {}) => {
     };
   } catch (err) {
     console.error("Error in postData:", err);
+    return {
+      error: true,
+      success: false,
+      message: err.message || "Network error. Please try again.",
+    };
   }
 };
 

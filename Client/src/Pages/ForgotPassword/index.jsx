@@ -80,7 +80,7 @@ function ForgotPassword() {
     >
       <div className="container">
         <div
-          className="card shadow-md w-[400px] rounded-md bg-white "
+          className="card shadow-md w-full max-w-[400px] rounded-md bg-white "
           style={{ margin: "auto", padding: "20px" }}
         >
           <h3 className="text-center text-[20px] text-black">Reset Form</h3>

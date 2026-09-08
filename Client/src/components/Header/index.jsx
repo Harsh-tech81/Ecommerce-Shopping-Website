@@ -19,6 +19,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { fetchDataFromApi } from "../../utils/api";
 import { HiOutlineMenu } from "react-icons/hi";
+import { IoSearch, IoCloseSharp } from "react-icons/io5";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -33,6 +34,7 @@ function Header() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isOpenCatPanel, setIsOpenCatPanel] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,6 +62,8 @@ function Header() {
       }
     });
   };
+
+  const isMobile = context?.windowWidth <= 992;
 
   return (
     <header className="bg-white sticky -top-[47px] z-[100]">
@@ -104,29 +108,41 @@ function Header() {
   }}
 >
         <div className="container flex items-center justify-between">
-          {/* {
-            context?.windowWidth <= 992 && <Button className="!w-[35px] !min-w-[35px] !h-[35px] !rounded-full !text-gray-800" onClick={() => setIsOpenCatPanel(true)}><HiOutlineMenu size={22}/></Button>
-          } */}
           <div className="col1 w-[40%]  lg:w-1/4 ">
             <Link to={"/"}>
               <img src="/logo4.png" alt="Logo" width={230} height={180} />
             </Link>
           </div>
+
+          {/* Desktop search */}
           <div
             className="col2 fixed top-0 left-0 w-full h-full lg:w-[45%] lg:static bg-white z-50 hidden lg:block"
             style={{ padding: "8px" }}
           >
             <Search />
           </div>
+
           <div
-            className="col3 w-[5%]  lg:w-[35%] flex items-center"
+            className="col3 flex items-center"
             style={{ paddingLeft: "14px" }}
           >
-            <ul className="flex items-center gap-0 lg:gap-3 w-full justify-end">
+            <ul className="flex items-center gap-0 lg:gap-3 justify-end">
+
+              {/* Mobile search icon */}
+              {isMobile && (
+                <li>
+                  <IconButton
+                    aria-label="search"
+                    onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+                  >
+                    <IoSearch className="text-[20px]" />
+                  </IconButton>
+                </li>
+              )}
+
               {context.isLogin ? (
                 <>
-                {
-                  context?.windowWidth > 992 &&  <li>
+                  <li>
                     <Button
                       className="!text-[#000] flex gap-0 lg:gap-3 items-center myAccountWrap cursor-pointer"
                       onClick={handleClick}
@@ -134,7 +150,7 @@ function Header() {
                       <Button className="!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !bg-[#f1f1f1]">
                         <FaRegUser className="text-[16px] text-[rgba(0,0,0,0.7)] " />
                       </Button>
-                      {context?.windowWidth > 992 && (
+                      {!isMobile && (
                         <div className="info flex flex-col ">
                           <h4 className="text-[14px] leading-4  text-left font-[500] text-[rgba(0,0,0,0.6)] capitalize justify-start">
                             {context?.userDetails?.name}
@@ -234,8 +250,6 @@ function Header() {
                       </MenuItem>
                     </Menu>
                   </li>
-                }
-                 
                 </>
               ) : (
                 <li
@@ -265,26 +279,25 @@ function Header() {
                 </li>
               )}
 
-              {context?.windowWidth > 992 && (
-                <li>
-                  <Tooltip title="Wishlist">
-                    <Link to="/my-list">
-                      <IconButton aria-label="heart">
-                        <StyledBadge
-                          badgeContent={
-                            context?.myListData?.length > 0
-                              ? context?.myListData?.length
-                              : 0
-                          }
-                          color="secondary"
-                        >
-                          <FiHeart />
-                        </StyledBadge>
-                      </IconButton>
-                    </Link>
-                  </Tooltip>
-                </li>
-              )}
+              {/* Wishlist - visible on all sizes */}
+              <li>
+                <Tooltip title="Wishlist">
+                  <Link to="/my-list">
+                    <IconButton aria-label="heart">
+                      <StyledBadge
+                        badgeContent={
+                          context?.myListData?.length > 0
+                            ? context?.myListData?.length
+                            : 0
+                        }
+                        color="secondary"
+                      >
+                        <FiHeart />
+                      </StyledBadge>
+                    </IconButton>
+                  </Link>
+                </Tooltip>
+              </li>
 
               <li>
                 <Tooltip title="Cart">
@@ -308,6 +321,26 @@ function Header() {
             </ul>
           </div>
         </div>
+
+        {/* Mobile search bar - slides down below header */}
+        {isMobile && mobileSearchOpen && (
+          <div
+            className="container"
+            style={{ paddingTop: "8px", paddingBottom: "8px" }}
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex-1">
+                <Search />
+              </div>
+              <IconButton
+                onClick={() => setMobileSearchOpen(false)}
+                className="!w-[36px] !h-[36px] !min-w-[36px]"
+              >
+                <IoCloseSharp className="text-[20px]" />
+              </IconButton>
+            </div>
+          </div>
+        )}
       </div>
 
       <Navigation isOpenCatPanel={isOpenCatPanel} setIsOpenCatPanel={setIsOpenCatPanel} />

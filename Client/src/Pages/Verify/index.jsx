@@ -55,7 +55,7 @@ if(actionType!=="forgot-password"){
     >
       <div className="container">
         <div
-          className="card shadow-md w-[400px] rounded-md bg-white "
+          className="card shadow-md w-full max-w-[400px] rounded-md bg-white "
           style={{ margin: "auto", padding: "25px" }}
         >
           <div className="items-center flex items-center justify-center">

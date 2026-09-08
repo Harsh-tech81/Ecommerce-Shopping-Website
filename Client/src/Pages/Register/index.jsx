@@ -99,9 +99,8 @@ function Register() {
 
     postData("/api/user/register", formFields)
       .then((res) => {
-
-        if (res?.error !== true) {
-          setIsLoading(false);
+        setIsLoading(false);
+        if (res?.success === true && res?.error !== true) {
           context.openAlertbox("success", res?.message);
           localStorage.setItem("userEmail", formFields.email);
           localStorage.removeItem("actionType");
@@ -113,13 +112,12 @@ function Register() {
 
           navigate("/verify");
         } else {
-          context.openAlertbox("error", res?.message);
-          setIsLoading(false);
+          context.openAlertbox("error", res?.message || "Registration failed");
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setIsLoading(false);
-        context.openAlertbox("error", "User registration failed");
+        context.openAlertbox("error", err?.message || "User registration failed");
       });
   };
 useEffect(() => {
