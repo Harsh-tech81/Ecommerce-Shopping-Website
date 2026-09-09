@@ -147,3 +147,48 @@ export const updateOrderStatusController = async (req, res) => {
     });
   }
 };
+
+export const trackOrderController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cleanId = (id || "").trim();
+    if (!cleanId) {
+      return res.status(400).json({
+        message: "Order ID is required",
+        error: true,
+        success: false,
+      });
+    }
+
+    let order = null;
+    if (cleanId.match(/^[0-9a-fA-F]{24}$/)) {
+      order = await OrderModel.findById(cleanId).populate("delivery_address userId");
+    }
+
+    if (!order) {
+      order = await OrderModel.findOne({ paymentId: cleanId }).populate("delivery_address userId");
+    }
+
+    if (!order) {
+      return res.status(404).json({
+        message: "No order found with this ID",
+        error: true,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Order tracking details fetched successfully",
+      data: order,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || "Internal server error",
+      error: true,
+      success: false,
+    });
+  }
+};
+
