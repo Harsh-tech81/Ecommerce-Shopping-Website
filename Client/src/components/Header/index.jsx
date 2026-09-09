@@ -108,11 +108,28 @@ function Header() {
   }}
 >
         <div className="container flex items-center justify-between">
-          <div className="col1 w-[40%]  lg:w-1/4 ">
-            <Link to={"/"}>
-              <img src="/logo4.png" alt="Logo" width={230} height={180} />
+          <div className="col1 flex items-center gap-1 w-auto lg:w-1/4">
+            {isMobile && (
+              <IconButton
+                onClick={() => {
+                  setIsOpenCatPanel(true);
+                  if (context?.setIsOpenCatPanel) context.setIsOpenCatPanel(true);
+                }}
+                className="!p-1 text-gray-700"
+                aria-label="open categories menu"
+              >
+                <HiOutlineMenu className="text-[26px]" />
+              </IconButton>
+            )}
+            <Link to={"/"} className="inline-block">
+              <img
+                src="/logo4.png"
+                alt="Logo"
+                className="w-[130px] sm:w-[170px] lg:w-[220px] object-contain"
+              />
             </Link>
           </div>
+
 
           {/* Desktop search */}
           <div
@@ -343,8 +360,15 @@ function Header() {
         )}
       </div>
 
-      <Navigation isOpenCatPanel={isOpenCatPanel} setIsOpenCatPanel={setIsOpenCatPanel} />
+      <Navigation
+        isOpenCatPanel={isOpenCatPanel || context?.isOpenCatPanel}
+        setIsOpenCatPanel={(val) => {
+          setIsOpenCatPanel(val);
+          if (context?.setIsOpenCatPanel) context.setIsOpenCatPanel(val);
+        }}
+      />
     </header>
+
   );
 }
 

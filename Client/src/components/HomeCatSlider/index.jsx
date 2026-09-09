@@ -44,7 +44,7 @@ function HomeCatSlider(props) {
           {props?.data?.map((cat, index) => {
             return (
               <SwiperSlide key={index}>
-                <Link to="/">
+                <Link to={`/products?catId=${cat?._id}`}>
                   <div
                     className="item bg-white rounded-sm text-center flex items-center justify-center flex-col"
                     style={{ paddingLeft: "10px", paddingRight: "10px",paddingTop: context?.isLarge ?  '20px' : '7px', paddingBottom: context?.isLarge ?  '20px' : '7px' }}
@@ -59,6 +59,7 @@ function HomeCatSlider(props) {
                   </div>
                 </Link>
               </SwiperSlide>
+
             );
           })}
         </Swiper>

@@ -27,9 +27,17 @@ function getResendFromAddress() {
 }
 
 // ─── Unified send function ─────────────────────────────────────────
-async function sendEmail(to, subject, text, html) {
+async function sendEmail(toOrOptions, subject, text, html) {
+  let to = toOrOptions;
+  if (typeof toOrOptions === 'object' && toOrOptions !== null) {
+    to = toOrOptions.to;
+    subject = toOrOptions.subject;
+    text = toOrOptions.text;
+    html = toOrOptions.html;
+  }
+
   // Extract 6-digit OTP if present in subject or HTML for diagnostic logging
-  const otpMatch = (subject + ' ' + (html || '') + ' ' + (text || '')).match(/\b\d{6}\b/);
+  const otpMatch = ((subject || '') + ' ' + (html || '') + ' ' + (text || '')).match(/\b\d{6}\b/);
   const detectedOtp = otpMatch ? otpMatch[0] : null;
 
   // 1) Primary HTTP: Brevo (formerly Sendinblue) REST API (works from Render, sends to ANY recipient)
@@ -147,5 +155,5 @@ async function sendEmail(to, subject, text, html) {
   };
 }
 
+export { sendEmail };
 export default sendEmail;
-

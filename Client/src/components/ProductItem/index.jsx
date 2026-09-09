@@ -163,33 +163,36 @@ function ProductItem(props) {
   };
 
   return (
-    <div className="productItem shadow-lg rounded-md overflow-hidden border-1 border-[rgba(0,0,0,0.1)] h-[430px]">
-      <div className="group imgWrapper overflow-hidden w-[100%] rounded-md relative h-[250px]">
-        <Link to={`/product/${props?.item?._id}`}>
-          <div className="img h-[350px] overflow-hidden">
+    <div className="productItem shadow-sm hover:shadow-md transition-shadow rounded-xl overflow-hidden border border-gray-200 flex flex-col justify-between bg-white h-[380px] sm:h-[420px]">
+      <div className="group imgWrapper overflow-hidden w-full relative h-[180px] sm:h-[220px] bg-gray-50 flex items-center justify-center">
+        <Link to={`/product/${props?.item?._id}`} className="w-full h-full block">
+          <div className="img h-full w-full overflow-hidden">
             <img
-              src={props?.item?.images[0]}
+              src={props?.item?.images?.[0] || props?.item?.image}
               className="w-full h-full object-cover"
+              alt={props?.item?.name}
             />
           </div>
-          <div className="img h-[350px] overflow-hidden">
-            <img
-              src={props?.item?.images[1]}
-              className="w-full h-full object-cover absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-105"
-            />
-          </div>
+          {props?.item?.images?.[1] && (
+            <div className="img h-full w-full overflow-hidden">
+              <img
+                src={props?.item?.images[1]}
+                className="w-full h-full object-cover absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-105"
+                alt={props?.item?.name}
+              />
+            </div>
+          )}
         </Link>
 
         {isShowTabs && (
           <div
-            className="flex items-center justify-center absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.7)] z-[60] gap-2"
-            style={{ padding: "12px" }}
+            className="flex items-center justify-center absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.7)] z-[60] gap-2 p-2"
           >
             <Button
-              className="!absolute top-[10px] right-[10px] !min-w-[30px] !min-h-[30px] !h-[30px] !w-[30px] !rounded-full !bg-[rgba(255,255,255,1)] text-black"
+              className="!absolute top-[10px] right-[10px] !min-w-[28px] !min-h-[28px] !h-[28px] !w-[28px] !rounded-full !bg-white text-black"
               onClick={() => setIsShowTabs(false)}
             >
-              <MdClose className="text-black z-[90] text-[25px]" />
+              <MdClose className="text-black z-[90] text-[20px]" />
             </Button>
 
             {props?.item?.size?.length !== 0 &&
@@ -197,8 +200,7 @@ function ProductItem(props) {
                 return (
                   <span
                     key={index}
-                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] max-w-[35px] h-[25px] rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
-                    style={{ padding: "0px 8px" }}
+                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] px-2 h-[24px] text-xs rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
                     onClick={() => handleClickActiveTab(index, size)}
                   >
                     {size}
@@ -210,8 +212,7 @@ function ProductItem(props) {
                 return (
                   <span
                     key={index}
-                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] max-w-[45px] h-[25px] rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
-                    style={{ padding: "0px 8px" }}
+                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] px-2 h-[24px] text-xs rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
                     onClick={() => handleClickActiveTab(index, ram)}
                   >
                     {ram}
@@ -223,8 +224,7 @@ function ProductItem(props) {
                 return (
                   <span
                     key={index}
-                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] max-w-[35px] h-[25px] rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
-                    style={{ padding: "0px 8px" }}
+                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] px-2 h-[24px] text-xs rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
                     onClick={() => handleClickActiveTab(index, weight)}
                   >
                     {weight}
@@ -234,107 +234,104 @@ function ProductItem(props) {
           </div>
         )}
 
-        <span
-          className="discount flex items-center absolute top-[10px] left-[10px] z-50 bg-[#ff5252] text-white rounded-lg text-[12px] font-[500]"
-          style={{ padding: "1px 5px" }}
-        >
-          {props?.item?.discount}%
-        </span>
+        {props?.item?.discount ? (
+          <span
+            className="discount flex items-center absolute top-2 left-2 z-40 bg-[#ff5252] text-white rounded-md text-[11px] font-bold px-2 py-0.5"
+          >
+            {props?.item?.discount}% OFF
+          </span>
+        ) : null}
 
-        <div className="actions absolute top-[-200px] right-[5px] z-50 flex items-center gap-2 flex-col w-[50px] group-hover:top-[15px] opacity-0 group-hover:opacity-100 transition-all">
+        <div className="actions absolute top-[-200px] right-[5px] z-50 flex items-center gap-1.5 flex-col w-[40px] group-hover:top-[10px] opacity-0 group-hover:opacity-100 transition-all">
           <Button
-            className="!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !bg-white !text-black hover:!bg-[#ff5252] hover:!text-white transition-all group"
+            className="!w-[32px] !h-[32px] !min-w-[32px] !rounded-full !bg-white !text-black hover:!bg-[#ff5252] hover:!text-white transition-all shadow-sm"
             onClick={() =>
               context.handleOpenProductDetailModel(true, props?.item)
             }
           >
-            <MdZoomOutMap className="text-[20px]" />
+            <MdZoomOutMap className="text-[18px]" />
           </Button>
 
           <Button
-            className={`!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !bg-white !text-black hover:!bg-[#ff5252] hover:!text-white transition-all group `}
+            className="!w-[32px] !h-[32px] !min-w-[32px] !rounded-full !bg-white !text-black hover:!bg-[#ff5252] hover:!text-white transition-all shadow-sm"
             onClick={() => handleAddToMyList(props?.item)}
           >
             {isAddedToMyList ? (
-              <IoMdHeart className="text-[18px] !text-[#ff5252] group-hover:text-white !hover:text-white" />
+              <IoMdHeart className="text-[16px] !text-[#ff5252]" />
             ) : (
-              <FaRegHeart className="text-[18px] !text-black group-hover:text-white !hover:text-white" />
+              <FaRegHeart className="text-[16px] !text-black hover:!text-white" />
             )}
           </Button>
         </div>
       </div>
 
       <div
-        className="info relative !h-[290px]"
-        style={{ padding: "14px", paddingTop: "20px", paddingBottom: "30px" }}
+        className="info relative flex-1 flex flex-col justify-between p-3"
       >
-        <h6 className="text-[13px] !font-[400]">
-          <span className="link transition-all">{props?.item?.brand}</span>
-        </h6>
-        <h3
-          className="text-[13px] title font-[500] text-[#000] line-clamp-2"
-          style={{ marginTop: "6px", marginBottom: "5px" }}
-        >
-          <Link
-            to={`/product/${props?.item?._id}`}
-            className="link transition-all"
+        <div>
+          <h6 className="text-[11px] text-gray-400 uppercase font-semibold tracking-wider mb-0.5">
+            <span className="link transition-all truncate block">{props?.item?.brand || props?.item?.catName}</span>
+          </h6>
+          <h3
+            className="text-[13px] sm:text-[14px] font-medium text-gray-800 line-clamp-2 leading-snug mb-1"
+            title={props?.item?.name}
           >
-            {props?.item?.name?.substr(0, 30) + "..."}
-          </Link>
-        </h3>
-        <Rating
-          name="size-small"
-          defaultValue={props?.item?.rating}
-          size="small"
-          readOnly
-        />
-
-        <div className="flex items-center gap-3">
-          <span className="oldPrice line-through text-gray-500 text-[15px] font-[500]">
-           {props?.item?.oldPrice?.toLocaleString("en-IN", {
-             style: "currency",
-             currency: "INR",
-             maximumFractionDigits: 0,
-           })}
-          </span>
-          <span className="price text-[15px] font-[600] text-[#ff5252]">
-       
-           {props?.item?.price?.toLocaleString("en-IN", {
-             style: "currency",
-             currency: "INR",
-             maximumFractionDigits: 0,
-           })}
-          </span>
+            <Link
+              to={`/product/${props?.item?._id}`}
+              className="link transition-all hover:text-[#ff5252]"
+            >
+              {props?.item?.name}
+            </Link>
+          </h3>
+          <Rating
+            name="size-small"
+            defaultValue={props?.item?.rating || 4}
+            size="small"
+            readOnly
+            className="!text-[14px]"
+          />
         </div>
 
-        <div className="flex justify-start">
-          {!isAdded ? (
-            <Button
-              className="btn-org flex gap-2 mt-12 "
-              onClick={() =>
-                addToCart(props?.item, context?.userDetails?._id, quantity)
-              }
-            >
-              <MdOutlineShoppingCart className="text-[22px] " /> Add to
-              Cart{" "}
-            </Button>
-          ) : (
-            <div className="flex items-center justify-between overflow-hidden rounded-full border border-[rgba(0,0,0,0.1)] w-full">
+        <div>
+          <div className="flex items-baseline gap-2 mb-2">
+            <span className="price text-[15px] sm:text-[16px] font-bold text-[#ff5252]">
+              &#8377;{props?.item?.price?.toLocaleString("en-IN")}
+            </span>
+            {props?.item?.oldPrice ? (
+              <span className="oldPrice line-through text-gray-400 text-[12px] sm:text-[13px]">
+                &#8377;{props?.item?.oldPrice?.toLocaleString("en-IN")}
+              </span>
+            ) : null}
+          </div>
+
+          <div className="w-full">
+            {!isAdded ? (
               <Button
-                className="!min-w-[35px] !w-[35px] !h-[30px]  !rounded-none !bg-[#f1f1f1]"
-                onClick={removeQty}
+                className="btn-org w-full flex items-center justify-center gap-1.5 !py-1.5 sm:!py-2 !text-xs sm:!text-sm font-semibold !rounded-lg"
+                onClick={() =>
+                  addToCart(props?.item, context?.userDetails?._id, quantity)
+                }
               >
-                <FaMinus className="text-black" />
+                <MdOutlineShoppingCart className="text-[17px]" /> Add to Cart
               </Button>
-              <span>{quantity}</span>
-              <Button
-                className="!min-w-[35px] !w-[35px] !h-[30px] !bg-[#ff5252] !rounded-none "
-                onClick={addQty}
-              >
-                <FaPlus className="text-white" />
-              </Button>
-            </div>
-          )}
+            ) : (
+              <div className="flex items-center justify-between overflow-hidden rounded-lg border border-gray-200 w-full h-[34px]">
+                <Button
+                  className="!min-w-[34px] !w-[34px] !h-full !rounded-none !bg-[#f1f1f1]"
+                  onClick={removeQty}
+                >
+                  <FaMinus className="text-black text-xs" />
+                </Button>
+                <span className="text-xs font-bold text-gray-800">{quantity}</span>
+                <Button
+                  className="!min-w-[34px] !w-[34px] !h-full !bg-[#ff5252] !rounded-none"
+                  onClick={addQty}
+                >
+                  <FaPlus className="text-white text-xs" />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

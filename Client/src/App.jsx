@@ -23,7 +23,22 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import Success from "./Pages/Orders/success";
 import Failed from "./Pages/Orders/failed";
 import SearchPage from "./Pages/Search";
+import HelpCenter from "./Pages/HelpCenter";
+import OrderTracking from "./Pages/OrderTracking";
+import { useLocation } from "react-router-dom";
+
 const MyContext = createContext();
+
+// Helper component inside Router to auto-collapse sidebars/panels on page change
+function RouteChangeHandler({ setIsOpenCatPanel, setOpenCartPanel, setOpenAddressPanel }) {
+  const location = useLocation();
+  useEffect(() => {
+    if (setIsOpenCatPanel) setIsOpenCatPanel(false);
+    if (setOpenCartPanel) setOpenCartPanel(false);
+    if (setOpenAddressPanel) setOpenAddressPanel(false);
+  }, [location.pathname, location.search]);
+  return null;
+}
 
 function App() {
   const [openProductDetail, setOpenProductDetail] = useState({
@@ -37,7 +52,9 @@ function App() {
   const [userDetails, setUserDetails] = useState(null);
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [openAddressPanel, setOpenAddressPanel] = useState(false);
+  const [isOpenCatPanel, setIsOpenCatPanel] = useState(false);
   const [address, setAddress] = useState([]);
+
   const [cartData, setCartData] = useState([]);
   const [myListData, setMyListData] = useState([]);
   const [addressId, setAddressId] = useState(null);
@@ -207,12 +224,19 @@ const editAddress = (id)=>{
     setSearchData,
     searchData,
     windowWidth,
-    isLarge
+    isLarge,
+    isOpenCatPanel,
+    setIsOpenCatPanel
   };
 
   return (
     <>
       <Router>
+        <RouteChangeHandler
+          setIsOpenCatPanel={setIsOpenCatPanel}
+          setOpenCartPanel={setOpenCartPanel}
+          setOpenAddressPanel={setOpenAddressPanel}
+        />
         <MyContext.Provider value={values}>
           <Header />
           <Routes>
@@ -238,7 +262,9 @@ const editAddress = (id)=>{
             <Route path={"/address"} exact={true} element={<Address />} />
             <Route path={"/order/success"} exact={true} element={<Success />} />
             <Route path={"/order/failed"} exact={true} element={<Failed />} />
-             <Route path={"/search"} exact={true} element={<SearchPage />} />
+            <Route path={"/search"} exact={true} element={<SearchPage />} />
+            <Route path={"/help-center"} exact={true} element={<HelpCenter />} />
+            <Route path={"/order-tracking"} exact={true} element={<OrderTracking />} />
             <Route
               path={"/forgot-password"}
               exact={true}
@@ -256,3 +282,4 @@ const editAddress = (id)=>{
 
 export default App;
 export { MyContext };
+

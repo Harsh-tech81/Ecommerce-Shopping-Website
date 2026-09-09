@@ -252,8 +252,8 @@ function Orders() {
                             {isOpenOrderIndex === index && (
                               <tr>
                                 <td
-                                  style={{ paddingLeft: "140px" }}
-                                  colSpan="4"
+                                  className="px-2 md:pl-[140px] py-4 bg-gray-50/50"
+                                  colSpan="12"
                                 >
                                   <div className="relative overflow-x-auto">
                                     <table className="w-full text-sm text-left rtl:text-right text-gray-500  dark:text-gray-400 ">

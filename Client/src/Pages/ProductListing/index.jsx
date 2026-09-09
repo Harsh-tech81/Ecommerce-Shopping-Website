@@ -6,7 +6,7 @@ import { IoGridSharp } from "react-icons/io5";
 import ProductItem from "../../components/ProductItem";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Pagination from "@mui/material/Pagination";
 import ProductLoading from "../../components/ProductLoading";
 import { postData } from "../../utils/api";
@@ -14,6 +14,7 @@ import { MyContext } from "../../App";
 import Drawer from "@mui/material/Drawer";
 import { IoCloseSharp } from "react-icons/io5";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
+import { useLocation } from "react-router-dom";
 
 function ProductListing() {
   const [itemView, setItemView] = useState("grid");
@@ -26,6 +27,12 @@ function ProductListing() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const context = useContext(MyContext);
   const isMobile = context?.windowWidth <= 992;
+  const location = useLocation();
+
+  useEffect(() => {
+    setMobileFilterOpen(false);
+  }, [location.search]);
+
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -229,7 +236,9 @@ function ProductListing() {
         open={mobileFilterOpen}
         onClose={() => setMobileFilterOpen(false)}
         anchor="left"
+        ModalProps={{ keepMounted: true }}
       >
+
         <div style={{ width: "85vw", maxWidth: "350px" }}>
           <div
             className="flex justify-between items-center border-b border-[rgba(0,0,0,0.2)]"

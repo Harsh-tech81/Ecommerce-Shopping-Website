@@ -59,7 +59,11 @@ function CategoryPanel(props) {
                   className="list-none flex items-center relative flex-col"
                   key={index}
                 >
-                  <Link to={`/products?catId=${cat._id}`} className="w-full">
+                  <Link
+                    to={`/products?catId=${cat._id}`}
+                    className="w-full"
+                    onClick={() => toggleDrawer(false)}
+                  >
                     <Button
                       className="w-full text-left! justify-start! text-[rgba(0,0,0,1)]!"
                       style={{ padding: "0 12px !important" }}
@@ -92,7 +96,11 @@ function CategoryPanel(props) {
                               className="list-none relative flex items-center flex-col "
                               key={index_}
                             >
-                              <Link to={`/products?subCatId=${subCat._id}`} className="w-full">
+                              <Link
+                                to={`/products?subCatId=${subCat._id}`}
+                                className="w-full"
+                                onClick={() => toggleDrawer(false)}
+                              >
                                 <Button className="w-full text-left! justify-start! px-3! text-[rgba(0,0,0,1)]!">
                                   {subCat?.name}
                                 </Button>
@@ -127,6 +135,7 @@ function CategoryPanel(props) {
                                             <Link
                                               to={`/products?thirdLevelCatId=${subSubCat._id}`}
                                               className="link w-full text-left! justify-start! px-3! transition text-[14px]"
+                                              onClick={() => toggleDrawer(false)}
                                             >
                                               {subSubCat?.name}
                                             </Link>
@@ -141,6 +150,7 @@ function CategoryPanel(props) {
                         })}
                     </ul>
                   )}
+
                 </li>
               );
             })}

@@ -15,114 +15,85 @@ import { MyContext } from "../../App";
 import { postData } from "../../utils/api";
 function Sidebar(props) {
   const [isOpen, setIsOpen] = useState(true);
+  const [price, setPrice] = useState([0, 200000]);
+  const location = useLocation();
+  const context = useContext(MyContext);
+
   const [filters, setFilters] = useState({
     catId: [],
     subCatId: [],
     thirdsubCatId: [],
-    minPrice: "",
-    maxPrice: "",
-    rating: "",
-    page: 1,
-    limit: 5,
+    minPrice: 0,
+    maxPrice: 200000,
+    rating: [],
+    limit: 10,
   });
-  const context = useContext(MyContext);
-  const [price, setPrice] = useState([0, 200000]);
-  const location = useLocation();
+
   const handleCheckBoxChange = (field, value) => {
-    context?.setSearchData([]);
-    const currentValues = filters[field] || [];
-    const updatedValues = currentValues?.includes(value)
-      ? currentValues.filter((item) => item !== value)
-      : [...currentValues, value];
-    setFilters((prev) => ({ ...prev, [field]: updatedValues }));
-
-    if (field === "catId") {
-      setFilters((prev) => ({ ...prev, subCatId: [], thirdsubCatId: [] }));
+    if (context?.setSearchData) {
+      context.setSearchData([]);
     }
+    setFilters((prev) => {
+      const currentValues = prev[field] || [];
+      const updatedValues = currentValues.includes(value)
+        ? currentValues.filter((item) => item !== value)
+        : [...currentValues, value];
+
+      if (field === "catId") {
+        return { ...prev, [field]: updatedValues, subCatId: [], thirdsubCatId: [] };
+      }
+      return { ...prev, [field]: updatedValues };
+    });
   };
 
+  // Sync category from URL search params
   useEffect(() => {
-    const url = window.location.href;
     const queryParameters = new URLSearchParams(location.search);
-    if (url.includes("catId")) {
-      const categoryId = queryParameters.get("catId");
-      const catArr = [];
-      catArr.push(categoryId);
-      filters.catId = catArr;
-      filters.subCatId = [];
-      filters.thirdsubCatId = [];
-      filters.rating = [];
-      context?.setSearchData([]);
+    const categoryId = queryParameters.get("catId");
+    const subCategoryId = queryParameters.get("subCatId");
+    const thirdsubCategoryId = queryParameters.get("thirdLevelCatId");
+
+    setFilters((prev) => ({
+      ...prev,
+      catId: categoryId ? [categoryId] : [],
+      subCatId: subCategoryId ? [subCategoryId] : [],
+      thirdsubCatId: thirdsubCategoryId ? [thirdsubCategoryId] : [],
+    }));
+
+    if (context?.setSearchData) {
+      context.setSearchData([]);
     }
-    if (url.includes("subCatId")) {
-      const subCategoryId = queryParameters.get("subCatId");
-      const subCatArr = [];
-      subCatArr.push(subCategoryId);
-      filters.subCatId = subCatArr;
-      filters.thirdsubCatId = [];
-      filters.catId = [];
-      filters.rating = [];
-      context?.setSearchData([]);
-    }
-    if (url.includes("thirdLevelCatId")) {
-      const thirdsubCategoryId = queryParameters.get("thirdLevelCatId");
-      const thirdsubCatArr = [];
-      thirdsubCatArr.push(thirdsubCategoryId);
-      filters.thirdsubCatId = thirdsubCatArr;
-      filters.subCatId = [];
-      filters.catId = [];
-      filters.rating = [];
-      context?.setSearchData([]);
-    }
+  }, [location.search]);
 
-    filters.page = 1;
-    setTimeout(() => {
-      filterData();
-    }, 200);
-
-// context?.setSearchData([]);
-  // if (context?.searchData?.product?.length > 0) {
-  //  props.setProductData(context?.searchData?.product?.slice((props.page - 1) * (Number(filters?.limit) || 5), props.page * (Number(filters?.limit) || 5)));
-  //       props.setTotalPages(Math.ceil((context?.searchData?.product?.length || 0) / (Number(filters?.limit) || 5)));
-  //       props.setIsLoading(false);
-  //       window.scrollTo(0, 0);
-  //   }
-  }, [location]);
-
-  const filterData = () => {
-    props.setIsLoading(true);
-  if (context?.searchData?.product?.length > 0) {
-        const limit = Number(filters?.limit) || 5;
-        const currentPage = Number(props?.page) || 1;
-        const startIndex = (currentPage - 1) * limit;
-        const endIndex = currentPage * limit;
-
-        props.setProductData(
-          context?.searchData?.product?.slice(startIndex, endIndex),
-        );
-        props.setTotalPages(
-          Math.ceil((context?.searchData?.product?.length || 0) / limit),
-        );
-        props.setIsLoading(false);
-        window.scrollTo(0, 0);
-    } else {
-      postData("/api/product/filters", filters).then((res) => {
-        props.setProductData(res?.products || []);
-        props.setTotalPages(res?.totalPages);
-        props.setIsLoading(false);
-        window.scrollTo(0, 0);
-      });
-    }
-  };
-
+  // Sync price slider into filters
   useEffect(() => {
-    filters.page = props.page;
-    filterData();
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: price[0],
+      maxPrice: price[1],
+    }));
+  }, [price]);
+
+  // Execute filter request
+  useEffect(() => {
+    props.setIsLoading(true);
+    const requestPayload = {
+      ...filters,
+      page: props.page || 1,
+    };
+
+    postData("/api/product/filters", requestPayload)
+      .then((res) => {
+        props.setProductData(res?.products || []);
+        props.setTotalPages(res?.totalPages || 1);
+        props.setIsLoading(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      })
+      .catch(() => {
+        props.setIsLoading(false);
+      });
   }, [filters, props.page]);
 
-  useEffect(() => {
-    setFilters((prev) => ({ ...prev, minPrice: price[0], maxPrice: price[1] }));
-  }, [price]);
 
   return (
     <aside
