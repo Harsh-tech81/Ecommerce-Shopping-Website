@@ -18,6 +18,7 @@ import {
   getSingleReviewController,
   getAllUsersController,
   getAllReviewsController,
+  resendOtpController,
 } from "../controllers/user.controller.js";
 import upload from "../middleware/multer.js";
 import { get } from "http";
@@ -26,6 +27,7 @@ const userRouter = Router();
 
 userRouter.post("/register", registerUserController);
 userRouter.post("/verifyEmail", verifyEmailController);
+userRouter.post("/resend-otp", resendOtpController);
 userRouter.post("/login", loginUserController);
 userRouter.post("/authWithGoogle", authWithGoogle);
 userRouter.get("/logout", auth, logoutUserController);

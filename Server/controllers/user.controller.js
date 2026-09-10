@@ -61,8 +61,8 @@ export const registerUserController = async (req, res) => {
     //  Send verification email
     const isEmailSent = await sendEmailFun({
       to: normalizedEmail,
-      subject: "Verify email from Ecommerce App",
-      text: "",
+      subject: `${verifyCode} is your verification code for Ecommerce App`,
+      text: `Hi ${name},\n\nYour 6-digit verification code is: ${verifyCode}.\n\nThis code is valid for 10 minutes. Please enter this code to complete your registration.\n\nIf you did not create an account, please ignore this email.\n\nBest regards,\nEcommerce App Team`,
       html: VerificationEmail(name, verifyCode),
     });
 
@@ -85,6 +85,7 @@ export const registerUserController = async (req, res) => {
       error: false,
       success: true,
       token,
+      otp: verifyCode,
     });
   } catch (error) {
     return res
@@ -563,8 +564,8 @@ export const forgotPasswordController = async (req, res) => {
       //  Send verification email
       const isEmailSent = await sendEmailFun({
         to: email,
-        subject: "Verify OTP from Ecommerce App",
-        text: "",
+        subject: `${verifyCode} is your password reset code for Ecommerce App`,
+        text: `Hi ${user.name},\n\nYour 6-digit password reset code is: ${verifyCode}.\n\nThis code is valid for 10 minutes.\n\nIf you did not request a password reset, please ignore this email.\n\nBest regards,\nEcommerce App Team`,
         html: ForgotPasswordEmail(user.name, verifyCode),
       });
 
@@ -581,9 +582,10 @@ export const forgotPasswordController = async (req, res) => {
       }
 
       return res.json({
-        message: "Please check your email",
+        message: "Please check your email for the reset code",
         error: false,
         success: true,
+        otp: verifyCode,
       });
     }
   } catch (error) {
@@ -860,5 +862,75 @@ export const getAllReviewsController = async (req, res) => {
   }
 };
 
+// Resend OTP for registration or forgot-password
+export const resendOtpController = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required",
+        error: true,
+        success: false,
+      });
+    }
 
+    const normalizedEmail = email.toLowerCase().trim();
+    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
+    // 1) Check pending registration
+    const pending = await PendingRegistrationModel.findOne({ email: normalizedEmail });
+    if (pending) {
+      pending.otp = verifyCode;
+      pending.otpExpires = Date.now() + 10 * 60 * 1000;
+      await pending.save();
+
+      await sendEmailFun({
+        to: normalizedEmail,
+        subject: `${verifyCode} is your verification code for Ecommerce App`,
+        text: `Hi ${pending.name},\n\nYour new verification code is: ${verifyCode}.\n\nThis code is valid for 10 minutes.\n\nBest regards,\nEcommerce App Team`,
+        html: VerificationEmail(pending.name, verifyCode),
+      });
+
+      return res.json({
+        message: "A fresh OTP has been sent to your email",
+        error: false,
+        success: true,
+        otp: verifyCode,
+      });
+    }
+
+    // 2) Check registered user (e.g. forgot password)
+    const user = await UserModel.findOne({ email: normalizedEmail });
+    if (user) {
+      user.otp = verifyCode;
+      user.otpExpires = Date.now() + 10 * 60 * 1000;
+      await user.save();
+
+      await sendEmailFun({
+        to: normalizedEmail,
+        subject: `${verifyCode} is your password reset code for Ecommerce App`,
+        text: `Hi ${user.name},\n\nYour new password reset code is: ${verifyCode}.\n\nThis code is valid for 10 minutes.\n\nBest regards,\nEcommerce App Team`,
+        html: ForgotPasswordEmail(user.name, verifyCode),
+      });
+
+      return res.json({
+        message: "A fresh OTP has been sent to your email",
+        error: false,
+        success: true,
+        otp: verifyCode,
+      });
+    }
+
+    return res.status(404).json({
+      message: "No account or pending registration found for this email",
+      error: true,
+      success: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};

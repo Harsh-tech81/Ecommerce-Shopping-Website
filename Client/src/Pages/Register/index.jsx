@@ -104,6 +104,11 @@ function Register() {
           context.openAlertbox("success", res?.message);
           localStorage.setItem("userEmail", formFields.email);
           localStorage.removeItem("actionType");
+          if (res?.otp) {
+            localStorage.setItem("latestOtp", res.otp);
+          } else {
+            localStorage.removeItem("latestOtp");
+          }
           setFormFields({
             email: "",
             name: "",

@@ -1,5 +1,13 @@
 import axios from "axios";
-const apiUrl = import.meta.env.VITE_API_URL;
+
+// Automatically use local backend if running on localhost, otherwise use production API URL
+const isLocalhost =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+
+const apiUrl = isLocalhost
+  ? (import.meta.env.VITE_API_URL?.includes("localhost") ? import.meta.env.VITE_API_URL : "http://localhost:3000")
+  : (import.meta.env.VITE_API_URL || "https://backend-3-j9bo.onrender.com");
 
 // Axios interceptor: auto-refresh expired access token
 axios.interceptors.response.use(

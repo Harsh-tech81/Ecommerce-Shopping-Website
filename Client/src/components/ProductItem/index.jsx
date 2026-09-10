@@ -12,6 +12,7 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import { deleteData, editData, postData } from "../../utils/api";
 import { MdClose } from "react-icons/md";
+
 function ProductItem(props) {
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
@@ -20,6 +21,7 @@ function ProductItem(props) {
   const [activeTab, setActiveTab] = useState(null);
   const [isShowTabs, setIsShowTabs] = useState(false);
   const [selectedTabName, setSelectedTabName] = useState(null);
+  const [justAddedHeart, setJustAddedHeart] = useState(false);
   const context = useContext(MyContext);
 
   const addToCart = (product, userId, quantity) => {
@@ -134,6 +136,7 @@ function ProductItem(props) {
       });
     }
   };
+
   const handleAddToMyList = (product) => {
     if (context?.userDetails === null || context?.userDetails === undefined) {
       context?.openAlertbox("error", "Please login to add item to my list");
@@ -155,6 +158,8 @@ function ProductItem(props) {
       if (res?.error === false) {
         context?.openAlertbox("success", res?.message);
         setIsAddedToMyList(true);
+        setJustAddedHeart(true);
+        setTimeout(() => setJustAddedHeart(false), 700);
         context.getMyListData();
       } else {
         context?.openAlertbox("error", res?.message);
@@ -163,8 +168,9 @@ function ProductItem(props) {
   };
 
   return (
-    <div className="productItem shadow-sm hover:shadow-md transition-shadow rounded-xl overflow-hidden border border-gray-200 flex flex-col justify-between bg-white h-[380px] sm:h-[420px]">
-      <div className="group imgWrapper overflow-hidden w-full relative h-[180px] sm:h-[220px] bg-gray-50 flex items-center justify-center">
+    <div className="productItem rounded-xl overflow-hidden border border-gray-100 flex flex-col justify-between bg-white">
+      {/* Image Section */}
+      <div className="group imgWrapper overflow-hidden w-full relative aspect-[4/5] bg-gray-50 flex items-center justify-center">
         <Link to={`/product/${props?.item?._id}`} className="w-full h-full block">
           <div className="img h-full w-full overflow-hidden">
             <img
@@ -177,103 +183,100 @@ function ProductItem(props) {
             <div className="img h-full w-full overflow-hidden">
               <img
                 src={props?.item?.images[1]}
-                className="w-full h-full object-cover absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-105"
+                className="w-full h-full object-cover absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-300"
                 alt={props?.item?.name}
               />
             </div>
           )}
         </Link>
 
+        {/* Variant Selection Overlay */}
         {isShowTabs && (
-          <div
-            className="flex items-center justify-center absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.7)] z-[60] gap-2 p-2"
-          >
+          <div className="variant-overlay flex items-center justify-center absolute top-0 left-0 w-full h-full z-[60] gap-2 p-3 flex-wrap">
             <Button
-              className="!absolute top-[10px] right-[10px] !min-w-[28px] !min-h-[28px] !h-[28px] !w-[28px] !rounded-full !bg-white text-black"
+              className="!absolute top-[10px] right-[10px] !min-w-[30px] !min-h-[30px] !h-[30px] !w-[30px] !rounded-full !bg-white/90 text-black hover:!bg-white"
               onClick={() => setIsShowTabs(false)}
             >
-              <MdClose className="text-black z-[90] text-[20px]" />
+              <MdClose className="text-black z-[90] text-[18px]" />
             </Button>
 
             {props?.item?.size?.length !== 0 &&
-              props?.item?.size?.map((size, index) => {
-                return (
-                  <span
-                    key={index}
-                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] px-2 h-[24px] text-xs rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
-                    onClick={() => handleClickActiveTab(index, size)}
-                  >
-                    {size}
-                  </span>
-                );
-              })}
+              props?.item?.size?.map((size, index) => (
+                <span
+                  key={index}
+                  className={`variant-pill ${activeTab === index ? "active" : ""}`}
+                  onClick={() => handleClickActiveTab(index, size)}
+                >
+                  {size}
+                </span>
+              ))}
             {props?.item?.productRam?.length !== 0 &&
-              props?.item?.productRam?.map((ram, index) => {
-                return (
-                  <span
-                    key={index}
-                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] px-2 h-[24px] text-xs rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
-                    onClick={() => handleClickActiveTab(index, ram)}
-                  >
-                    {ram}
-                  </span>
-                );
-              })}
+              props?.item?.productRam?.map((ram, index) => (
+                <span
+                  key={index}
+                  className={`variant-pill ${activeTab === index ? "active" : ""}`}
+                  onClick={() => handleClickActiveTab(index, ram)}
+                >
+                  {ram}
+                </span>
+              ))}
             {props?.item?.productWeight?.length !== 0 &&
-              props?.item?.productWeight?.map((weight, index) => {
-                return (
-                  <span
-                    key={index}
-                    className={`flex items-center justify-center bg-[rgba(255,255,255,0.8)] px-2 h-[24px] text-xs rounded-sm cursor-pointer hover:bg-white ${activeTab === index && "!bg-[#ff5252] !text-white"}`}
-                    onClick={() => handleClickActiveTab(index, weight)}
-                  >
-                    {weight}
-                  </span>
-                );
-              })}
+              props?.item?.productWeight?.map((weight, index) => (
+                <span
+                  key={index}
+                  className={`variant-pill ${activeTab === index ? "active" : ""}`}
+                  onClick={() => handleClickActiveTab(index, weight)}
+                >
+                  {weight}
+                </span>
+              ))}
           </div>
         )}
 
+        {/* Discount Badge */}
         {props?.item?.discount ? (
-          <span
-            className="discount flex items-center absolute top-2 left-2 z-40 bg-[#ff5252] text-white rounded-md text-[11px] font-bold px-2 py-0.5"
-          >
+          <span className="discount flex items-center absolute top-2.5 left-2.5 z-40 bg-gradient-to-r from-[#ff5252] to-[#e63946] text-white rounded-full text-[10px] font-bold px-2.5 py-1 shadow-sm">
             {props?.item?.discount}% OFF
           </span>
         ) : null}
 
-        <div className="actions absolute top-[-200px] right-[5px] z-50 flex items-center gap-1.5 flex-col w-[40px] group-hover:top-[10px] opacity-0 group-hover:opacity-100 transition-all">
+        {/* Quick Action Buttons */}
+        <div className="actions absolute top-[-200px] right-[8px] z-50 flex items-center gap-2 flex-col w-[38px] group-hover:top-[10px] opacity-0 group-hover:opacity-100 transition-all duration-300">
           <Button
-            className="!w-[32px] !h-[32px] !min-w-[32px] !rounded-full !bg-white !text-black hover:!bg-[#ff5252] hover:!text-white transition-all shadow-sm"
+            className="!w-[36px] !h-[36px] !min-w-[36px] !rounded-full !bg-white/95 !text-gray-700 hover:!bg-[#ff5252] hover:!text-white transition-all !shadow-md"
             onClick={() =>
               context.handleOpenProductDetailModel(true, props?.item)
             }
           >
-            <MdZoomOutMap className="text-[18px]" />
+            <MdZoomOutMap className="text-[16px]" />
           </Button>
 
           <Button
-            className="!w-[32px] !h-[32px] !min-w-[32px] !rounded-full !bg-white !text-black hover:!bg-[#ff5252] hover:!text-white transition-all shadow-sm"
+            className={`!w-[36px] !h-[36px] !min-w-[36px] !rounded-full !bg-white/95 hover:!bg-[#ff5252] hover:!text-white transition-all !shadow-md ${isAddedToMyList ? "!bg-[#fff0f0]" : ""}`}
             onClick={() => handleAddToMyList(props?.item)}
           >
             {isAddedToMyList ? (
-              <IoMdHeart className="text-[16px] !text-[#ff5252]" />
+              <IoMdHeart className={`text-[17px] !text-[#ff5252] ${justAddedHeart ? "heart-active" : ""}`} />
             ) : (
-              <FaRegHeart className="text-[16px] !text-black hover:!text-white" />
+              <FaRegHeart className="text-[14px] !text-gray-600 hover:!text-white" />
             )}
           </Button>
         </div>
       </div>
 
-      <div
-        className="info relative flex-1 flex flex-col justify-between p-3"
-      >
+      {/* Product Info Section */}
+      <div className="info relative flex-1 flex flex-col justify-between p-3 sm:p-4">
         <div>
-          <h6 className="text-[11px] text-gray-400 uppercase font-semibold tracking-wider mb-0.5">
-            <span className="link transition-all truncate block">{props?.item?.brand || props?.item?.catName}</span>
+          {/* Brand */}
+          <h6 className="text-[10px] sm:text-[11px] text-gray-400 uppercase font-semibold tracking-wider mb-1">
+            <span className="link transition-all truncate block">
+              {props?.item?.brand || props?.item?.catName}
+            </span>
           </h6>
+
+          {/* Product Name */}
           <h3
-            className="text-[13px] sm:text-[14px] font-medium text-gray-800 line-clamp-2 leading-snug mb-1"
+            className="text-[13px] sm:text-[14px] font-semibold text-gray-800 line-clamp-2 leading-snug mb-1.5"
             title={props?.item?.name}
           >
             <Link
@@ -283,6 +286,8 @@ function ProductItem(props) {
               {props?.item?.name}
             </Link>
           </h3>
+
+          {/* Rating */}
           <Rating
             name="size-small"
             defaultValue={props?.item?.rating || 4}
@@ -292,22 +297,25 @@ function ProductItem(props) {
           />
         </div>
 
-        <div>
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="price text-[15px] sm:text-[16px] font-bold text-[#ff5252]">
+        {/* Price & Cart */}
+        <div className="mt-2">
+          {/* Price Row */}
+          <div className="flex items-baseline gap-2 mb-2.5">
+            <span className="price text-[15px] sm:text-[17px] font-bold text-gray-900">
               &#8377;{props?.item?.price?.toLocaleString("en-IN")}
             </span>
             {props?.item?.oldPrice ? (
-              <span className="oldPrice line-through text-gray-400 text-[12px] sm:text-[13px]">
+              <span className="oldPrice line-through text-gray-400 text-[11px] sm:text-[12px]">
                 &#8377;{props?.item?.oldPrice?.toLocaleString("en-IN")}
               </span>
             ) : null}
           </div>
 
+          {/* Add to Cart / Quantity Stepper */}
           <div className="w-full">
             {!isAdded ? (
               <Button
-                className="btn-org w-full flex items-center justify-center gap-1.5 !py-1.5 sm:!py-2 !text-xs sm:!text-sm font-semibold !rounded-lg"
+                className="btn-org w-full flex items-center justify-center gap-1.5 !py-2 sm:!py-2.5 !text-[12px] sm:!text-[13px] font-semibold !rounded-lg"
                 onClick={() =>
                   addToCart(props?.item, context?.userDetails?._id, quantity)
                 }
@@ -315,19 +323,19 @@ function ProductItem(props) {
                 <MdOutlineShoppingCart className="text-[17px]" /> Add to Cart
               </Button>
             ) : (
-              <div className="flex items-center justify-between overflow-hidden rounded-lg border border-gray-200 w-full h-[34px]">
+              <div className="qty-stepper flex items-center justify-between overflow-hidden rounded-lg w-full h-[38px] sm:h-[40px]">
                 <Button
-                  className="!min-w-[34px] !w-[34px] !h-full !rounded-none !bg-[#f1f1f1]"
+                  className="!min-w-[40px] !w-[40px] !h-full !rounded-none !bg-gray-50 hover:!bg-gray-100 !transition-colors"
                   onClick={removeQty}
                 >
-                  <FaMinus className="text-black text-xs" />
+                  <FaMinus className="text-gray-600 text-[10px]" />
                 </Button>
-                <span className="text-xs font-bold text-gray-800">{quantity}</span>
+                <span className="text-[13px] font-bold text-gray-800 select-none">{quantity}</span>
                 <Button
-                  className="!min-w-[34px] !w-[34px] !h-full !bg-[#ff5252] !rounded-none"
+                  className="!min-w-[40px] !w-[40px] !h-full !bg-[#ff5252] hover:!bg-[#e63946] !rounded-none !transition-colors"
                   onClick={addQty}
                 >
-                  <FaPlus className="text-white text-xs" />
+                  <FaPlus className="text-white text-[10px]" />
                 </Button>
               </div>
             )}

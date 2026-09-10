@@ -1,3 +1,4 @@
+/* ====== MOBILE (320px - 992px) ====== */
 @media only screen and (min-width: 320px) and (max-width: 992px) {
   html,body {
     overflow-x: hidden;
@@ -127,12 +128,54 @@ width: 200px !important;
 
 }
 
+/* ====== TABLET (768px - 1024px) ====== */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    width: 92% !important;
+    max-width: 92% !important;
+  }
+
+  /* Product grid: 3 columns on tablet */
+  .productsSlider .swiper-slide {
+    width: calc(33.33% - 12px) !important;
+  }
+
+  /* Footer columns on tablet */
+  .footer .part1 {
+    width: 30% !important;
+  }
+  .footer .part2 {
+    width: 35% !important;
+  }
+  .footer .part3 {
+    width: 35% !important;
+    padding-left: 20px !important;
+  }
+
+  /* Cart panel slightly wider on tablet */
+  .cartPanel .MuiPaper-root {
+    width: 380px !important;
+  }
+}
+
+/* ====== SMALL MOBILE (320px - 767px) ====== */
 @media only screen and (min-width: 320px) and (max-width: 767px) {
     .MuiTabs-flexContainer button{
         font-size: 13px !important;
     }
+
+    /* Cart panel full width on small mobile */
+    .cartPanel .MuiPaper-root {
+      width: 90% !important;
+      max-width: 360px !important;
+    }
+    .addressPanel .MuiPaper-root {
+      width: 95% !important;
+      max-width: 400px !important;
+    }
 }
 
+/* ====== EXTRA SMALL (320px - 480px) ====== */
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   /* Extra small screens */
   .optBox input {
@@ -148,5 +191,15 @@ width: 200px !important;
     min-width: 28px !important;
     height: 28px !important;
     font-size: 12px !important;
+  }
+
+  /* Full-width cart panel on very small screens */
+  .cartPanel .MuiPaper-root {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .addressPanel .MuiPaper-root {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 }

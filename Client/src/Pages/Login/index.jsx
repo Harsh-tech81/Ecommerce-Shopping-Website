@@ -1,5 +1,9 @@
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { useContext, useEffect, useState } from "react";
@@ -18,6 +22,9 @@ function Login() {
   const context = useContext(MyContext);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [openForgotModal, setOpenForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [isForgotLoading, setIsForgotLoading] = useState(false);
 
   const [formFields, setFormFields] = useState({
     email: "",
@@ -75,26 +82,46 @@ function Login() {
 useEffect(() => {
 window.scrollTo(0, 0);
 },[]);
-  const forgotPassword = () => {
-    if (formFields.email === "") {
-      context.openAlertbox("error", "Please enter email");
-      return false;
-    } else {
-      context.openAlertbox("success", `OTP send to ${formFields.email}`);
-      localStorage.setItem("userEmail", formFields.email);
-      localStorage.setItem("actionType", "forgot-password");
+  const handleOpenForgotModal = () => {
+    setForgotEmail(formFields.email || "");
+    setOpenForgotModal(true);
+  };
 
-      postData("/api/user/forgot-password", {
-        email: formFields.email,
-      }).then((res) => {
+  const handleSendForgotOtp = (e) => {
+    if (e) e.preventDefault();
+    const targetEmail = (forgotEmail || formFields.email || "").trim();
+    if (!targetEmail) {
+      context.openAlertbox("error", "Please enter your registered email address");
+      return;
+    }
+
+    setIsForgotLoading(true);
+
+    postData("/api/user/forgot-password", {
+      email: targetEmail,
+    })
+      .then((res) => {
+        setIsForgotLoading(false);
         if (res?.error === false) {
-          context.openAlertbox("success", "Check your mail");
+          localStorage.setItem("userEmail", targetEmail);
+          localStorage.setItem("actionType", "forgot-password");
+          setOpenForgotModal(false);
+          context.openAlertbox(
+            "success",
+            res?.message || "OTP sent! Please check your email inbox or spam folder."
+          );
           navigate("/verify");
         } else {
-          context.openAlertbox("error", res?.message);
+          context.openAlertbox(
+            "error",
+            res?.message || "Failed to send OTP. Please check your email."
+          );
         }
+      })
+      .catch((err) => {
+        setIsForgotLoading(false);
+        context.openAlertbox("error", "Network request failed. Please check connection.");
       });
-    }
   };
 
   const SignWithGoogle = () => {
@@ -201,8 +228,8 @@ window.scrollTo(0, 0);
               </Button>
             </div>
             <a
-              className="link cursor-pointer text-[14px] font-[600]"
-              onClick={forgotPassword}
+              className="link cursor-pointer text-[14px] font-[600] text-[#ff5252] hover:underline"
+              onClick={handleOpenForgotModal}
             >
               Forgot Password?
             </a>
@@ -239,6 +266,64 @@ window.scrollTo(0, 0);
           </form>
         </div>
       </div>
+
+      {/* Forgot Password Dialog */}
+      <Dialog
+        open={openForgotModal}
+        onClose={() => !isForgotLoading && setOpenForgotModal(false)}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          style: { borderRadius: "14px", padding: "10px" },
+        }}
+      >
+        <DialogTitle className="!font-[700] text-center !text-[20px] !text-gray-800">
+          Reset Password
+        </DialogTitle>
+        <form onSubmit={handleSendForgotOtp}>
+          <DialogContent className="!pt-1">
+            <p className="text-gray-600 text-[13px] mb-4 text-center leading-relaxed">
+              Enter your registered email address below. We will send you a 6-digit verification OTP.
+            </p>
+            <TextField
+              type="email"
+              label="Registered Email Address"
+              fullWidth
+              size="small"
+              value={forgotEmail}
+              onChange={(e) => setForgotEmail(e.target.value)}
+              required
+              autoFocus
+              placeholder="e.g. name@example.com"
+              disabled={isForgotLoading}
+            />
+          </DialogContent>
+          <DialogActions className="!px-6 !pb-4 !pt-2 flex justify-between gap-2">
+            <Button
+              onClick={() => setOpenForgotModal(false)}
+              disabled={isForgotLoading}
+              className="!text-gray-600 !capitalize"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isForgotLoading || !forgotEmail.trim()}
+              className="!bg-[#ff5252] !text-white !capitalize !font-[600] !px-5"
+            >
+              {isForgotLoading ? (
+                <div className="flex items-center gap-2 text-white">
+                  <CircularProgress size={16} color="inherit" />
+                  <span>Sending OTP...</span>
+                </div>
+              ) : (
+                "Send OTP"
+              )}
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </section>
   );
 }
