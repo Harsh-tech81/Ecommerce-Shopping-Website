@@ -130,7 +130,13 @@ function HelpCenter() {
         </Breadcrumbs>
 
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl p-6 sm:p-12 text-center relative overflow-hidden shadow-lg mb-8 sm:mb-12">
+        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 animate-gradientShift bg-[length:200%_200%] text-white rounded-2xl p-6 sm:p-12 text-center relative overflow-hidden shadow-lg mb-8 sm:mb-12">
+          {/* Animated floating decorative elements */}
+          <div className="absolute top-10 left-10 w-12 h-12 bg-white/10 rounded-full animate-float"></div>
+          <div className="absolute top-20 right-20 w-24 h-24 bg-white/5 rounded-full animate-floatDelayed"></div>
+          <div className="absolute bottom-10 left-1/4 w-16 h-16 bg-white/10 rounded-full animate-float"></div>
+          <div className="absolute -bottom-5 right-1/4 w-20 h-20 bg-white/5 rounded-full animate-floatDelayed"></div>
+
           <div className="max-w-2xl mx-auto relative z-10">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-red-300 mb-3 backdrop-blur-sm">
               <IoHelpCircleOutline size={16} /> 24/7 Customer Support
@@ -143,7 +149,7 @@ function HelpCenter() {
             </p>
 
             {/* Help Search Input */}
-            <div className="relative max-w-lg mx-auto">
+            <div className="relative max-w-lg mx-auto helpSearch">
               <input
                 type="text"
                 placeholder="Type your question or keyword..."
@@ -163,10 +169,10 @@ function HelpCenter() {
         <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-hide">
           <button
             onClick={() => setSelectedCategory("all")}
-            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer duration-300 ${
               selectedCategory === "all"
                 ? "bg-[#ff5252] text-white shadow-sm"
-                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 transform hover:scale-105"
             }`}
           >
             All Topics
@@ -178,10 +184,10 @@ function HelpCenter() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer duration-300 ${
                   isSelected
                     ? "bg-[#ff5252] text-white shadow-sm"
-                    : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                    : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 transform hover:scale-105"
                 }`}
               >
                 <Icon size={16} />
@@ -195,12 +201,12 @@ function HelpCenter() {
         <div className="max-w-4xl mx-auto mb-12 sm:mb-16">
           {filteredCategories.length > 0 ? (
             <div className="space-y-6">
-              {filteredCategories.map((category) => {
+              {filteredCategories.map((category, index) => {
                 const Icon = category.icon;
                 return (
                   <div
                     key={category.id}
-                    className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+                    className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-fadeInUp stagger-${(index % 4) + 1}`}
                   >
                     <div className="p-4 sm:p-5 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
                       <div className="w-9 h-9 rounded-lg bg-red-100 text-[#ff5252] flex items-center justify-center">
@@ -227,8 +233,13 @@ function HelpCenter() {
                             className="hover:bg-gray-50/50"
                             sx={{ padding: { xs: "12px 16px", sm: "16px 20px" } }}
                           >
-                            <span className="text-sm sm:text-base font-semibold text-gray-800 text-left">
+                            <span className="text-sm sm:text-base font-semibold text-gray-800 text-left flex items-center flex-wrap">
                               {item.q}
+                              {category.id === "orders" && idx === 0 && (
+                                <span className="ml-2 inline-block px-2 py-0.5 bg-red-100 text-[#ff5252] text-[10px] font-bold rounded-full uppercase tracking-wider">
+                                  Popular
+                                </span>
+                              )}
                             </span>
                           </AccordionSummary>
                           <AccordionDetails
@@ -256,7 +267,10 @@ function HelpCenter() {
               })}
             </div>
           ) : (
-            <div className="bg-white rounded-xl p-8 text-center border border-gray-100 shadow-sm">
+            <div className="bg-white rounded-xl p-8 text-center border border-gray-100 shadow-sm animate-fadeInUp">
+              <div className="flex justify-center mb-3 text-gray-300">
+                <IoSearchOutline size={48} />
+              </div>
               <p className="text-gray-600 text-sm mb-4">
                 No matching answers found for "{searchQuery}".
               </p>
@@ -285,8 +299,8 @@ function HelpCenter() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-red-50 text-[#ff5252] flex items-center justify-center mb-3">
+            <div className="group card-hover bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-[#ff5252]/30 transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-red-50 text-[#ff5252] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
                 <FiPhoneCall size={22} />
               </div>
               <h4 className="font-bold text-sm sm:text-base text-gray-800 mb-1">Call Us</h4>
@@ -299,8 +313,8 @@ function HelpCenter() {
               </a>
             </div>
 
-            <div className="bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
+            <div className="group card-hover bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-blue-500/30 transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
                 <FiMail size={22} />
               </div>
               <h4 className="font-bold text-sm sm:text-base text-gray-800 mb-1">Email Support</h4>
@@ -313,8 +327,8 @@ function HelpCenter() {
               </a>
             </div>
 
-            <div className="bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
+            <div className="group card-hover bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-emerald-500/30 transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
                 <FiMessageSquare size={22} />
               </div>
               <h4 className="font-bold text-sm sm:text-base text-gray-800 mb-1">Track An Order</h4>

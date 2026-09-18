@@ -124,7 +124,7 @@ function OrderTracking() {
 
         {/* Header Search Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 max-w-3xl mx-auto mb-8 text-center animate-fadeInUp">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ff5252] to-[#e63946] text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-red-200/50">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ff5252] to-[#e63946] text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-red-200/50 animate-wiggle">
             <LiaShippingFastSolid size={32} />
           </div>
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
@@ -147,7 +147,7 @@ function OrderTracking() {
                 placeholder="Enter Order ID (e.g. 64f1a2b3c4...)"
                 value={orderIdInput}
                 onChange={(e) => setOrderIdInput(e.target.value)}
-                className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-[#ff5252] focus:bg-white transition-all"
+                className="tracking-search w-full bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-[#ff5252] focus:bg-white transition-all"
               />
               <IoSearchOutline
                 size={18}
@@ -174,7 +174,7 @@ function OrderTracking() {
                 Recent Orders:
               </span>
               <div className="flex flex-wrap gap-2">
-                {recentOrders.map((ord) => (
+                {recentOrders.map((ord, idx) => (
                   <button
                     key={ord._id}
                     type="button"
@@ -182,7 +182,7 @@ function OrderTracking() {
                       setOrderIdInput(ord._id);
                       handleTrackOrder(ord._id);
                     }}
-                    className="text-xs bg-gray-50 hover:bg-red-50 hover:text-[#ff5252] text-gray-600 font-medium px-3 py-2 rounded-lg border border-gray-200 transition-all cursor-pointer hover:border-red-200 hover:shadow-sm"
+                    className={`text-xs bg-gray-50 hover:bg-red-50 hover:text-[#ff5252] text-gray-600 font-medium px-3 py-2 rounded-lg border border-gray-200 transition-all cursor-pointer hover:border-red-200 hover:shadow-sm stagger-${idx + 1}`}
                   >
                     #{ord._id.slice(-8)} &bull; &#8377;{ord?.totalAmt || 0}
                   </button>
@@ -204,7 +204,7 @@ function OrderTracking() {
         {orderDetails && (
           <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8 animate-fadeInUp">
             {/* Status Bar */}
-            <div className="p-5 sm:p-6 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
+            <div className="p-5 sm:p-6 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 flex items-center justify-between flex-wrap gap-3 hover:scale-[1.01] transition-transform duration-300">
               <div>
                 <span className="text-[10px] sm:text-xs text-gray-400 block uppercase tracking-wider">Order ID</span>
                 <span className="text-sm sm:text-base font-bold text-gray-900 break-all font-mono">
@@ -239,7 +239,7 @@ function OrderTracking() {
                   {/* Vertical progress line */}
                   <div className="absolute left-[18px] top-[24px] bottom-[24px] w-[3px] bg-gray-200 rounded-full">
                     <div
-                      className="w-full bg-gradient-to-b from-[#ff5252] to-[#e63946] rounded-full transition-all duration-700 ease-out"
+                      className="w-full bg-gradient-to-b from-[#ff5252] to-[#e63946] rounded-full transition-all duration-700 ease-out shimmer-bar"
                       style={{ height: `${progressPercent}%` }}
                     />
                   </div>
@@ -252,9 +252,9 @@ function OrderTracking() {
                     return (
                       <div key={step.key} className="flex items-start gap-4 relative py-4">
                         <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 z-10 transition-all duration-500 ${
+                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 z-10 transition-all duration-500 animate-scaleIn stagger-${idx + 1} ${
                             isCompleted
-                              ? "bg-gradient-to-br from-[#ff5252] to-[#e63946] text-white shadow-lg shadow-red-200/50"
+                              ? "bg-gradient-to-br from-[#ff5252] to-[#e63946] text-white shadow-[0_0_15px_rgba(255,82,82,0.6)]"
                               : "bg-gray-100 text-gray-400 border-2 border-gray-200"
                           } ${isCurrent ? "animate-pulseGlow" : ""}`}
                         >
@@ -276,7 +276,7 @@ function OrderTracking() {
                   {/* Horizontal progress bar */}
                   <div className="absolute top-[24px] left-[48px] right-[48px] h-[3px] bg-gray-200 rounded-full">
                     <div
-                      className="h-full bg-gradient-to-r from-[#ff5252] to-[#e63946] rounded-full transition-all duration-700 ease-out"
+                      className="h-full bg-gradient-to-r from-[#ff5252] to-[#e63946] rounded-full transition-all duration-700 ease-out shimmer-bar"
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
@@ -290,9 +290,9 @@ function OrderTracking() {
                       return (
                         <div key={step.key} className="flex flex-col items-center text-center">
                           <div
-                            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+                            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 animate-scaleIn stagger-${idx + 1} ${
                               isCompleted
-                                ? "bg-gradient-to-br from-[#ff5252] to-[#e63946] text-white shadow-lg shadow-red-200/50"
+                                ? "bg-gradient-to-br from-[#ff5252] to-[#e63946] text-white shadow-[0_0_15px_rgba(255,82,82,0.6)]"
                                 : "bg-white text-gray-400 border-2 border-gray-200"
                             } ${isCurrent ? "animate-pulseGlow ring-4 ring-red-100" : ""}`}
                           >
@@ -323,7 +323,7 @@ function OrderTracking() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gradient-to-br from-gray-50 to-white p-4 rounded-xl border border-gray-100">
                   <div className="flex items-center gap-2 text-gray-700 font-semibold text-xs sm:text-sm mb-2">
-                    <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0 animate-float">
                       <FaRegUser className="text-[#ff5252] text-[11px]" />
                     </div>
                     Customer Info
@@ -337,7 +337,7 @@ function OrderTracking() {
 
                 <div className="bg-gradient-to-br from-gray-50 to-white p-4 rounded-xl border border-gray-100">
                   <div className="flex items-center gap-2 text-gray-700 font-semibold text-xs sm:text-sm mb-2">
-                    <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0 animate-float">
                       <CiLocationOn className="text-[#ff5252] text-[13px]" />
                     </div>
                     Shipping Address
@@ -364,7 +364,7 @@ function OrderTracking() {
 
               <div className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden mb-6">
                 {orderDetails?.products?.map((item, i) => (
-                  <div key={i} className="p-3 sm:p-4 flex items-center gap-3 hover:bg-gray-50/50 transition-colors">
+                  <div key={i} className={`p-3 sm:p-4 flex items-center gap-3 hover:bg-gray-50/50 transition-colors animate-slideIn stagger-${Math.min(i + 1, 4)}`}>
                     <div className="w-14 h-14 rounded-xl bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0">
                       <img
                         src={item?.image || "/product-placeholder.png"}
@@ -403,7 +403,7 @@ function OrderTracking() {
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] sm:text-xs text-gray-400 block uppercase tracking-wider">Total</span>
-                  <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#ff5252] to-[#e63946] bg-clip-text text-transparent">
+                  <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#ff5252] to-[#e63946] bg-clip-text text-transparent animate-scaleIn inline-block">
                     &#8377;{Number(orderDetails?.totalAmt || 0).toLocaleString("en-IN")}
                   </span>
                 </div>

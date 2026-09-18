@@ -34,20 +34,21 @@ function CartPanel({ data }) {
         {data?.length > 0 &&
           data?.map((item, index) => (
             <div
-              className="cartItem w-full flex items-center gap-4 border-b border-[rgba(0,0,0,0.1)]"
+              className="cartItem w-full flex items-center gap-4 mb-2 p-2 rounded-xl hover:bg-gray-50 transition-all animate-slideIn"
               key={index}
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               <div
-                className="img w-[25%] overflow-hidden h-[90px] rounded-md"
-                style={{ paddingBottom: "5px" }}
+                className="img w-[25%] overflow-hidden rounded-lg border border-gray-100"
               >
                 <Link
                   to={`/product/${item?.productId}`}
-                  className="block group"
+                  className="block group h-full"
                 >
                   <img
                     src={item?.image}
-                    className="w-full group-hover:scale-105 "
+                    className="w-full h-full object-cover aspect-square group-hover:scale-105 transition-transform"
+                    alt={item?.productTitle}
                   />
                 </Link>
               </div>
@@ -83,10 +84,13 @@ function CartPanel({ data }) {
                     })}
                   </span>
                 </p>
-                <MdDeleteOutline
-                  className="absolute top-[10px] right-[10px] cursor-pointer text-[20px] link transition-all"
+                
+                <div
+                  className="absolute top-[10px] right-[10px] cursor-pointer w-7 h-7 rounded-full bg-gray-100 hover:bg-red-50 flex items-center justify-center transition-all group"
                   onClick={() => removeFromCart(item?._id)}
-                />
+                >
+                  <MdDeleteOutline className="text-[18px] text-gray-600 group-hover:text-red-500 transition-colors" />
+                </div>
               </div>
             </div>
           ))}
@@ -98,10 +102,11 @@ function CartPanel({ data }) {
         className="bottomSec absolute bottom-[10px] left-[10px] w-full overflow-hidden"
         style={{ paddingRight: "10px" }}
       >
+        <div className="w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent h-[1px]"></div>
         <div
-          className="bottominfo w-full border-t border-[rgba(0,0,0,0.1)] flex items-center justify-between flex-col"
+          className="bottominfo w-full flex items-center justify-between flex-col"
           style={{
-            paddingTop: "8px",
+            paddingTop: "12px",
             paddingBottom: "8px",
             paddingLeft: "18px",
             paddingRight: "18px",
@@ -123,8 +128,9 @@ function CartPanel({ data }) {
           </div>
         </div>
 
+        <div className="w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent h-[1px]"></div>
         <div
-          className="bottominfo w-full border-t border-[rgba(0,0,0,0.1)] flex items-center justify-between flex-col"
+          className="bottominfo w-full flex items-center justify-between flex-col"
           style={{
             paddingTop: "8px",
             paddingBottom: "8px",
@@ -133,8 +139,8 @@ function CartPanel({ data }) {
           }}
         >
           <div className="flex items-center justify-between w-full">
-            <span className="text-[14px] font-[600]">Total (tax excl.)</span>
-            <span className="text-[#ff5252] font-bold">
+            <span className="text-[16px] font-[700]">Total (tax excl.)</span>
+            <span className="text-[18px] font-[800] bg-gradient-to-r from-[#ff5252] to-[#e63946] bg-clip-text text-transparent">
               {context?.cartData
                 ?.reduce((total, item) => total + item.price * item.quantity, 0)
                 .toLocaleString("en-IN", {
@@ -145,12 +151,12 @@ function CartPanel({ data }) {
             </span>
           </div>
           <br />
-          <div className="flex items-center justify-between w-full gap-5">
+          <div className="flex items-center justify-between w-full gap-4">
             <Link to="/cart" className="w-[50%] d-block">
-              <Button className="btn-org btn-lg w-full">View Cart</Button>
+              <Button className="btn-org btn-lg w-full !rounded-xl">View Cart</Button>
             </Link>
             <Link to="/checkout" className="w-[50%] d-block">
-              <Button className="btn-org btn-border  btn-lg w-full flex gap-2">
+              <Button className="btn-org btn-border btn-lg w-full flex gap-2 !rounded-xl">
                 <BsFillBagCheckFill className="text-[20px]  " />
                 Checkout
               </Button>

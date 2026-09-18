@@ -126,6 +126,23 @@ width: 200px !important;
   font-size: 16px !important;
 }
 
+/* Cart page responsive */
+.cartPage .leftPart,
+.cartPage .rightPart {
+  width: 100% !important;
+}
+
+/* Help Center hero responsive */
+.helpCenterPage .floating-dot {
+  display: none !important;
+}
+
+/* Disable heavy animations on mobile for performance */
+.animate-float,
+.animate-floatDelayed {
+  animation: none !important;
+}
+
 }
 
 /* ====== TABLET (768px - 1024px) ====== */
@@ -173,6 +190,14 @@ width: 200px !important;
       width: 95% !important;
       max-width: 400px !important;
     }
+
+/* Cart items compact on mobile */
+.cartItem .img {
+  width: 25% !important;
+}
+.cartItem .info {
+  width: 75% !important;
+}
 }
 
 /* ====== EXTRA SMALL (320px - 480px) ====== */
