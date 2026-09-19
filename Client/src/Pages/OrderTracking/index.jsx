@@ -12,9 +12,10 @@ import {
   IoWarningOutline,
 } from "react-icons/io5";
 import { LiaShippingFastSolid } from "react-icons/lia";
-import { BsBoxSeam, BsCheck2Circle } from "react-icons/bs";
+import { BsBoxSeam, BsCheck2Circle, BsXCircle } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
+import { TbTruckDelivery } from "react-icons/tb";
 
 const STEPS = [
   { key: "placed", title: "Order Placed", icon: BsBoxSeam, desc: "We have received your order." },
@@ -25,6 +26,7 @@ const STEPS = [
 
 function getActiveStepIndex(status) {
   const s = (status || "").toLowerCase();
+  if (s === "cancelled") return -1;
   if (s === "delivered") return 3;
   if (s === "shipped" || s === "out for delivery") return 2;
   if (s === "confirmed" || s === "processing") return 1;
@@ -68,7 +70,8 @@ function OrderTracking() {
 
   const handleTrackOrder = (idToTrack) => {
     const targetId = (idToTrack || orderIdInput).trim();
-    if (!targetId) {
+    const cleanTargetId = targetId.replace(/^#/, "");
+    if (!cleanTargetId) {
       setErrorMessage("Please enter a valid Order ID.");
       return;
     }
@@ -76,7 +79,7 @@ function OrderTracking() {
     setIsLoading(true);
     setErrorMessage("");
 
-    fetchDataFromApi(`/api/order/track/${targetId}`)
+    fetchDataFromApi(`/api/order/track/${cleanTargetId}`)
       .then((res) => {
         setIsLoading(false);
         if (res?.error === false && res?.data) {
@@ -84,20 +87,20 @@ function OrderTracking() {
           setErrorMessage("");
         } else {
           const localMatch = recentOrders.find(
-            (o) => o._id === targetId || o.paymentId === targetId
+            (o) => o._id === cleanTargetId || o.paymentId === cleanTargetId
           );
           if (localMatch) {
             setOrderDetails(localMatch);
           } else {
             setOrderDetails(null);
-            setErrorMessage(res?.message || "No order found with ID '" + targetId + "'.");
+            setErrorMessage(res?.response?.data?.message || res?.message || "No order found with ID '" + cleanTargetId + "'.");
           }
         }
       })
       .catch((err) => {
         setIsLoading(false);
         setOrderDetails(null);
-        setErrorMessage(err?.message || "Failed to fetch tracking information.");
+        setErrorMessage(err?.response?.data?.message || err?.message || "No order found with ID '" + cleanTargetId + "'.");
       });
   };
 
@@ -109,7 +112,8 @@ function OrderTracking() {
   }, [queryOrderId]);
 
   const activeStep = getActiveStepIndex(orderDetails?.order_status);
-  const progressPercent = ((activeStep) / (STEPS.length - 1)) * 100;
+  const isCancelled = activeStep === -1;
+  const progressPercent = isCancelled ? 0 : ((activeStep) / (STEPS.length - 1)) * 100;
 
   return (
     <section className="orderTrackingPage bg-gradient-to-b from-[#fafbfc] to-[#f3f4f6] py-6 sm:py-10 min-h-[75vh]">
@@ -182,7 +186,7 @@ function OrderTracking() {
                       setOrderIdInput(ord._id);
                       handleTrackOrder(ord._id);
                     }}
-                    className={`text-xs bg-gray-50 hover:bg-red-50 hover:text-[#ff5252] text-gray-600 font-medium px-3 py-2 rounded-lg border border-gray-200 transition-all cursor-pointer hover:border-red-200 hover:shadow-sm stagger-${idx + 1}`}
+                    className={`animate-fadeInUp stagger-${idx + 1} text-xs bg-gray-50 hover:bg-red-50 hover:text-[#ff5252] text-gray-600 font-medium px-3 py-2 rounded-lg border border-gray-200 transition-all cursor-pointer hover:border-red-200 hover:shadow-sm`}
                   >
                     #{ord._id.slice(-8)} &bull; &#8377;{ord?.totalAmt || 0}
                   </button>
@@ -197,6 +201,15 @@ function OrderTracking() {
           <div className="max-w-3xl mx-auto bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl flex items-center gap-3 mb-8 animate-fadeInUp">
             <IoWarningOutline size={22} className="flex-shrink-0 text-red-500" />
             <p className="text-xs sm:text-sm m-0 leading-tight">{errorMessage}</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!orderDetails && !errorMessage && !isLoading && (
+          <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-10 sm:p-16 flex flex-col items-center justify-center text-center animate-fadeInUp">
+            <TbTruckDelivery size={64} className="text-gray-300 mb-4" />
+            <h3 className="text-lg font-bold text-gray-700 mb-2">Ready to track?</h3>
+            <p className="text-sm text-gray-500 max-w-sm">Enter your Order ID above to track your shipment and see real-time updates on your delivery.</p>
           </div>
         )}
 
@@ -221,6 +234,7 @@ function OrderTracking() {
                   </div>
                 )}
                 <span className={`px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider ${
+                  isCancelled ? "badge-cancelled" :
                   activeStep === 3 ? "badge-delivered" :
                   activeStep === 2 ? "badge-shipped" :
                   activeStep === 1 ? "badge-processing" :
@@ -233,11 +247,19 @@ function OrderTracking() {
 
             {/* Stepper Timeline */}
             <div className="p-6 sm:p-10 border-b border-gray-100">
-              {isMobile ? (
+              {isCancelled ? (
+                <div className="flex flex-col items-center text-center py-6">
+                  <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 mb-4 animate-scaleIn">
+                    <BsXCircle size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Order Cancelled</h3>
+                  <p className="text-sm text-gray-500">This order has been cancelled and will not be delivered.</p>
+                </div>
+              ) : isMobile ? (
                 /* MOBILE: Vertical Stepper */
-                <div className="flex flex-col gap-0 relative pl-6">
+                <div className="flex flex-col gap-0 relative pl-10">
                   {/* Vertical progress line */}
-                  <div className="absolute left-[18px] top-[24px] bottom-[24px] w-[3px] bg-gray-200 rounded-full">
+                  <div className="absolute left-[36px] top-[24px] bottom-[24px] w-[3px] bg-gray-200 rounded-full">
                     <div
                       className="w-full bg-gradient-to-b from-[#ff5252] to-[#e63946] rounded-full transition-all duration-700 ease-out shimmer-bar"
                       style={{ height: `${progressPercent}%` }}
@@ -252,7 +274,7 @@ function OrderTracking() {
                     return (
                       <div key={step.key} className="flex items-start gap-4 relative py-4">
                         <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 z-10 transition-all duration-500 animate-scaleIn stagger-${idx + 1} ${
+                          className={`w-10 h-10 -ml-5 rounded-full flex items-center justify-center flex-shrink-0 z-10 transition-all duration-500 animate-scaleIn stagger-${idx + 1} ${
                             isCompleted
                               ? "bg-gradient-to-br from-[#ff5252] to-[#e63946] text-white shadow-[0_0_15px_rgba(255,82,82,0.6)]"
                               : "bg-gray-100 text-gray-400 border-2 border-gray-200"
@@ -274,7 +296,7 @@ function OrderTracking() {
                 /* DESKTOP: Horizontal Stepper */
                 <div className="relative">
                   {/* Horizontal progress bar */}
-                  <div className="absolute top-[24px] left-[48px] right-[48px] h-[3px] bg-gray-200 rounded-full">
+                  <div className="absolute top-[24px] left-[12.5%] right-[12.5%] h-[3px] bg-gray-200 rounded-full">
                     <div
                       className="h-full bg-gradient-to-r from-[#ff5252] to-[#e63946] rounded-full transition-all duration-700 ease-out shimmer-bar"
                       style={{ width: `${progressPercent}%` }}
@@ -331,7 +353,7 @@ function OrderTracking() {
                   <p className="text-xs sm:text-sm text-gray-600 m-0 leading-relaxed">
                     <strong>Name:</strong> {orderDetails?.userId?.name || "Customer"}<br />
                     <strong>Email:</strong> {orderDetails?.userId?.email || "N/A"}<br />
-                    <strong>Phone:</strong> {orderDetails?.userId?.mobile || "N/A"}
+                    <strong>Phone:</strong> {orderDetails?.delivery_address?.mobile || orderDetails?.userId?.mobile || "N/A"}
                   </p>
                 </div>
 
@@ -343,7 +365,7 @@ function OrderTracking() {
                     Shipping Address
                   </div>
                   <p className="text-xs sm:text-sm text-gray-600 m-0 leading-relaxed">
-                    {typeof orderDetails?.delivery_address === "object" ? (
+                    {orderDetails?.delivery_address && typeof orderDetails.delivery_address === "object" ? (
                       <>
                         {orderDetails.delivery_address?.address_line},{" "}
                         {orderDetails.delivery_address?.city},{" "}
@@ -370,6 +392,7 @@ function OrderTracking() {
                         src={item?.image || "/product-placeholder.png"}
                         alt={item?.productTitle || item?.name}
                         className="w-full h-full object-cover"
+                        onError={(e) => { e.target.style.display = 'none'; }}
                       />
                     </div>
                     <div className="flex-1 min-w-0">

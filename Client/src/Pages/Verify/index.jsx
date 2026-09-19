@@ -94,9 +94,6 @@ function Verify() {
       .then((res) => {
         setIsResending(false);
         if (res?.error === false) {
-          if (res?.otp) {
-            localStorage.setItem("latestOtp", res.otp);
-          }
           context.openAlertbox(
             "success",
             res?.message || "A new OTP has been sent! Check your inbox or spam."
@@ -166,23 +163,7 @@ function Verify() {
             </div>
           </form>
 
-          {localStorage.getItem("latestOtp") && (
-            <div className="bg-amber-50 border border-amber-200 rounded-md p-3 text-center my-3">
-              <p className="text-xs text-amber-800 font-medium">
-                Verification Code:{" "}
-                <span className="font-bold text-sm tracking-widest text-[#ff5252] bg-white px-2 py-0.5 rounded border border-amber-300 ml-1">
-                  {localStorage.getItem("latestOtp")}
-                </span>
-              </p>
-              <button
-                type="button"
-                onClick={() => setOtp(localStorage.getItem("latestOtp"))}
-                className="mt-1.5 text-xs text-[#ff5252] font-semibold underline hover:text-[#d32f2f] cursor-pointer"
-              >
-                Auto-fill Code
-              </button>
-            </div>
-          )}
+
 
           <p className="text-center text-xs text-gray-500 mt-4 leading-relaxed">
             Didn't receive code? Please check your <b>Spam</b> or <b>Promotions</b> folder.

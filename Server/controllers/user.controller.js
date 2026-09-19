@@ -85,7 +85,6 @@ export const registerUserController = async (req, res) => {
       error: false,
       success: true,
       token,
-      otp: verifyCode,
     });
   } catch (error) {
     return res
@@ -895,7 +894,6 @@ export const resendOtpController = async (req, res) => {
         message: "A fresh OTP has been sent to your email",
         error: false,
         success: true,
-        otp: verifyCode,
       });
     }
 
@@ -917,7 +915,6 @@ export const resendOtpController = async (req, res) => {
         message: "A fresh OTP has been sent to your email",
         error: false,
         success: true,
-        otp: verifyCode,
       });
     }
 

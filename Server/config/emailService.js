@@ -163,15 +163,8 @@ async function sendEmail(toOrOptions, subject, text, html) {
     console.log('=============================================================\n');
   }
 
-  // 6) Resilient Fallback: Ensure user is NEVER blocked by email provider restrictions
-  if (detectedOtp) {
-    console.log(`[EmailService] Emergency OTP fallback active for ${to}: ${detectedOtp}`);
-    return {
-      success: true,
-      messageId: 'otp-fallback-' + Date.now(),
-      fallbackOtp: detectedOtp
-    };
-  }
+  // All providers failed — return honest failure
+  console.error(`[EmailService] All email providers failed for ${to}. Please configure a valid email provider (Gmail SMTP locally, Brevo or verified Resend domain on Render).`);
 
   return {
     success: false,

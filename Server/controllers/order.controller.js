@@ -58,7 +58,7 @@ export const getOrdersController = async (req, res) => {
   try {
     const orders = await OrderModel.find()
       .sort({ createdAt: -1 })
-      .populate("delivery_address userId");
+      .populate("delivery_address").populate("userId", "name email mobile");
     return res.status(200).json({
       message: "Orders fetched successfully",
       data: orders,
@@ -80,7 +80,7 @@ export const getMyOrdersController = async (req, res) => {
 
     const orders = await OrderModel.find({ userId })
       .sort({ createdAt: -1 })
-      .populate("delivery_address userId");
+      .populate("delivery_address").populate("userId", "name email mobile");
 
     return res.status(200).json({
       message: "User orders fetched successfully",
@@ -110,7 +110,7 @@ export const updateOrderStatusController = async (req, res) => {
       });
     }
 
-    const validStatuses = ["pending", "confirmed", "delivered"];
+    const validStatuses = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
     if (!validStatuses.includes(order_status)) {
       return res.status(400).json({
         message: "Invalid order status",
@@ -151,7 +151,7 @@ export const updateOrderStatusController = async (req, res) => {
 export const trackOrderController = async (req, res) => {
   try {
     const { id } = req.params;
-    const cleanId = (id || "").trim();
+    const cleanId = (id || "").trim().replace(/^#/, "");
     if (!cleanId) {
       return res.status(400).json({
         message: "Order ID is required",
@@ -162,11 +162,11 @@ export const trackOrderController = async (req, res) => {
 
     let order = null;
     if (cleanId.match(/^[0-9a-fA-F]{24}$/)) {
-      order = await OrderModel.findById(cleanId).populate("delivery_address userId");
+      order = await OrderModel.findById(cleanId).populate("delivery_address").populate("userId", "name email mobile");
     }
 
     if (!order) {
-      order = await OrderModel.findOne({ paymentId: cleanId }).populate("delivery_address userId");
+      order = await OrderModel.findOne({ paymentId: cleanId }).populate("delivery_address").populate("userId", "name email mobile");
     }
 
     if (!order) {

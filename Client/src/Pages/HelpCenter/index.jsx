@@ -119,7 +119,7 @@ function HelpCenter() {
   }).filter(Boolean);
 
   return (
-    <section className="helpCenterPage bg-[#f9fafb] py-6 sm:py-10 min-h-[75vh]">
+    <section className="helpCenterPage bg-[#f9fafb] py-8 sm:py-14 min-h-[80vh]">
       <div className="container">
         {/* Breadcrumb */}
         <Breadcrumbs aria-label="breadcrumb" className="mb-4">
@@ -130,21 +130,15 @@ function HelpCenter() {
         </Breadcrumbs>
 
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 animate-gradientShift bg-[length:200%_200%] text-white rounded-2xl p-6 sm:p-12 text-center relative overflow-hidden shadow-lg mb-8 sm:mb-12">
-          {/* Animated floating decorative elements */}
-          <div className="absolute top-10 left-10 w-12 h-12 bg-white/10 rounded-full animate-float"></div>
-          <div className="absolute top-20 right-20 w-24 h-24 bg-white/5 rounded-full animate-floatDelayed"></div>
-          <div className="absolute bottom-10 left-1/4 w-16 h-16 bg-white/10 rounded-full animate-float"></div>
-          <div className="absolute -bottom-5 right-1/4 w-20 h-20 bg-white/5 rounded-full animate-floatDelayed"></div>
-
+        <div className="bg-gradient-to-r from-red-50 via-white to-orange-50 text-gray-900 rounded-2xl p-6 sm:p-10 text-center relative overflow-hidden shadow-sm mb-10 sm:mb-14 border border-red-100">
           <div className="max-w-2xl mx-auto relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-red-300 mb-3 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white text-[#ff5252] shadow-sm mb-4 border border-red-100">
               <IoHelpCircleOutline size={16} /> 24/7 Customer Support
             </span>
-            <h1 className="text-2xl sm:text-4xl font-bold mb-3 tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-bold mb-3 tracking-tight text-gray-900">
               How can we assist you today?
             </h1>
-            <p className="text-gray-300 text-sm sm:text-base mb-6">
+            <p className="text-gray-600 text-sm sm:text-base mb-8">
               Find instant answers to common questions about your orders, shipments, returns, and payments.
             </p>
 
@@ -155,7 +149,7 @@ function HelpCenter() {
                 placeholder="Type your question or keyword..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white text-gray-900 rounded-full py-3.5 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff5252] shadow-md"
+                className="w-full bg-white text-gray-900 rounded-full py-3.5 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff5252] shadow-md border border-gray-100"
               />
               <IoSearchOutline
                 size={20}
@@ -166,13 +160,13 @@ function HelpCenter() {
         </div>
 
         {/* Quick Category Filters */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-hide">
+        <div className="flex items-center justify-start sm:justify-center gap-3 overflow-x-auto pb-3 mb-10 scrollbar-hide">
           <button
             onClick={() => setSelectedCategory("all")}
-            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer duration-300 ${
+            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors cursor-pointer duration-200 ${
               selectedCategory === "all"
                 ? "bg-[#ff5252] text-white shadow-sm"
-                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 transform hover:scale-105"
+                : "bg-white text-gray-700 hover:bg-red-50 hover:text-[#ff5252] border border-gray-200"
             }`}
           >
             All Topics
@@ -184,10 +178,10 @@ function HelpCenter() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer duration-300 ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors cursor-pointer duration-200 ${
                   isSelected
                     ? "bg-[#ff5252] text-white shadow-sm"
-                    : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 transform hover:scale-105"
+                    : "bg-white text-gray-700 hover:bg-red-50 hover:text-[#ff5252] border border-gray-200"
                 }`}
               >
                 <Icon size={16} />
@@ -198,9 +192,9 @@ function HelpCenter() {
         </div>
 
         {/* FAQ Accordions by Category */}
-        <div className="max-w-4xl mx-auto mb-12 sm:mb-16">
+        <div className="max-w-5xl mx-auto mb-14 sm:mb-20">
           {filteredCategories.length > 0 ? (
-            <div className="space-y-6">
+            <div className="space-y-8">
               {filteredCategories.map((category, index) => {
                 const Icon = category.icon;
                 return (
@@ -208,11 +202,9 @@ function HelpCenter() {
                     key={category.id}
                     className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-fadeInUp stagger-${(index % 4) + 1}`}
                   >
-                    <div className="p-4 sm:p-5 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-red-100 text-[#ff5252] flex items-center justify-center">
-                        <Icon size={20} />
-                      </div>
-                      <h2 className="text-base sm:text-lg font-bold text-gray-800 m-0">
+                    <div className="p-5 sm:p-6 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3 border-l-4 border-l-[#ff5252]">
+                      <Icon size={24} className="text-[#ff5252]" />
+                      <h2 className="text-lg sm:text-xl font-bold text-gray-800 m-0">
                         {category.title}
                       </h2>
                     </div>
@@ -231,7 +223,7 @@ function HelpCenter() {
                           <AccordionSummary
                             expandIcon={<MdExpandMore className="text-gray-400 text-xl" />}
                             className="hover:bg-gray-50/50"
-                            sx={{ padding: { xs: "12px 16px", sm: "16px 20px" } }}
+                            sx={{ padding: { xs: "16px 20px", sm: "20px 24px" } }}
                           >
                             <span className="text-sm sm:text-base font-semibold text-gray-800 text-left flex items-center flex-wrap">
                               {item.q}
@@ -243,16 +235,16 @@ function HelpCenter() {
                             </span>
                           </AccordionSummary>
                           <AccordionDetails
-                            sx={{ padding: { xs: "0 16px 16px 16px", sm: "0 20px 20px 20px" } }}
+                            sx={{ padding: { xs: "0 20px 20px 20px", sm: "0 24px 24px 24px" } }}
                           >
-                            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed m-0">
+                            <p className="text-sm sm:text-base text-gray-600 leading-relaxed m-0">
                               {item.a}
                             </p>
                             {item.action && (
-                              <div className="mt-3">
+                              <div className="mt-4">
                                 <Link
                                   to={item.action.link}
-                                  className="inline-flex items-center text-xs sm:text-sm font-semibold text-[#ff5252] hover:underline"
+                                  className="inline-flex items-center text-sm font-semibold text-[#ff5252] hover:underline"
                                 >
                                   {item.action.text} &rarr;
                                 </Link>
@@ -288,54 +280,54 @@ function HelpCenter() {
         </div>
 
         {/* Contact Support Cards */}
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-6">
-            <h3 className="text-lg sm:text-2xl font-bold text-gray-800 mb-1">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <h3 className="text-xl sm:text-3xl font-bold text-gray-800 mb-2">
               Still have questions?
             </h3>
-            <p className="text-gray-500 text-xs sm:text-sm">
+            <p className="text-gray-500 text-sm sm:text-base">
               Our dedicated support team is available 24/7 to resolve any issue.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="group card-hover bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-[#ff5252]/30 transition-all duration-300">
-              <div className="w-12 h-12 rounded-full bg-red-50 text-[#ff5252] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                <FiPhoneCall size={22} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="group card-hover bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-[#ff5252]/30 transition-all duration-300">
+              <div className="w-14 h-14 rounded-full bg-red-50 text-[#ff5252] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <FiPhoneCall size={24} />
               </div>
-              <h4 className="font-bold text-sm sm:text-base text-gray-800 mb-1">Call Us</h4>
-              <p className="text-xs text-gray-500 mb-3">Available 24 hours every day</p>
+              <h4 className="font-bold text-base sm:text-lg text-gray-800 mb-2">Call Us</h4>
+              <p className="text-sm text-gray-500 mb-4">Available 24 hours every day</p>
               <a
                 href="tel:+918001234567"
-                className="text-xs sm:text-sm font-semibold text-[#ff5252] hover:underline"
+                className="text-sm sm:text-base font-semibold text-[#ff5252] hover:underline"
               >
                 +91 800 123 4567
               </a>
             </div>
 
-            <div className="group card-hover bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-blue-500/30 transition-all duration-300">
-              <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                <FiMail size={22} />
+            <div className="group card-hover bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-[#ff5252]/30 transition-all duration-300">
+              <div className="w-14 h-14 rounded-full bg-red-50 text-[#ff5252] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <FiMail size={24} />
               </div>
-              <h4 className="font-bold text-sm sm:text-base text-gray-800 mb-1">Email Support</h4>
-              <p className="text-xs text-gray-500 mb-3">Response within 2-4 hours</p>
+              <h4 className="font-bold text-base sm:text-lg text-gray-800 mb-2">Email Support</h4>
+              <p className="text-sm text-gray-500 mb-4">Response within 2-4 hours</p>
               <a
                 href="mailto:support@estore.com"
-                className="text-xs sm:text-sm font-semibold text-blue-600 hover:underline"
+                className="text-sm sm:text-base font-semibold text-[#ff5252] hover:underline"
               >
                 support@estore.com
               </a>
             </div>
 
-            <div className="group card-hover bg-white p-5 sm:p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-emerald-500/30 transition-all duration-300">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                <FiMessageSquare size={22} />
+            <div className="group card-hover bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center hover:border-[#ff5252]/30 transition-all duration-300">
+              <div className="w-14 h-14 rounded-full bg-red-50 text-[#ff5252] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <FiMessageSquare size={24} />
               </div>
-              <h4 className="font-bold text-sm sm:text-base text-gray-800 mb-1">Track An Order</h4>
-              <p className="text-xs text-gray-500 mb-3">Live status & shipment updates</p>
+              <h4 className="font-bold text-base sm:text-lg text-gray-800 mb-2">Track An Order</h4>
+              <p className="text-sm text-gray-500 mb-4">Live status & shipment updates</p>
               <Link
                 to="/order-tracking"
-                className="text-xs sm:text-sm font-semibold text-emerald-600 hover:underline"
+                className="text-sm sm:text-base font-semibold text-[#ff5252] hover:underline"
               >
                 Track Now &rarr;
               </Link>

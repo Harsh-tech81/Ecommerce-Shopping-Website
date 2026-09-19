@@ -252,7 +252,9 @@ function Orders() {
                         >
                           <MenuItem value={"pending"}>Pending</MenuItem>
                           <MenuItem value={"confirmed"}>Confirmed</MenuItem>
+                          <MenuItem value={"shipped"}>Shipped</MenuItem>
                           <MenuItem value={"delivered"}>Delivered</MenuItem>
+                          <MenuItem value={"cancelled"}>Cancelled</MenuItem>
                         </Select>
                       </td>
                       <td
